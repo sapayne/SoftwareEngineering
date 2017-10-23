@@ -36,6 +36,7 @@ public class bPlusTree {
 	
 	//inserts and sorts the new item to the database, if the item doesn't already exist
 	public void insort(String name, String index) {
+		//call search to see if it exists, if not add it to the bPlusTree
 		current = binarySearch(name);
 		if(current == null) {
 			current.addChild(Node);
@@ -49,7 +50,6 @@ public class bPlusTree {
 			current.incSize();
 			this.size++;
 		}
-		//call search to see if it exists, if not add it to the bPlusTree
 	}
 	
 	//allows you to find the bTree node closest to the value you want to add or find in the bPlusTree
