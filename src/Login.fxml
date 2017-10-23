@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="application.MainController">
+  <children>
+    <Button layoutX="270.0" layoutY="295.0" mnemonicParsing="false" onAction="#Login" prefHeight="30.0" prefWidth="59.999900000002526" text="Login" />
+    <Label fx:id="lblStatus" alignment="CENTER" contentDisplay="CENTER" layoutX="234.0" layoutY="238.0" text="Please Login" textAlignment="CENTER" textFill="RED" textOverrun="CENTER_ELLIPSIS">
+      <font>
+        <Font size="24.0" />
+      </font>
+    </Label>
+    <TextField id="Email" fx:id="txtEmail" layoutX="153.0" layoutY="110.0" prefHeight="41.0" prefWidth="295.0" promptText="Email" text="" />
+    <PasswordField fx:id="txtPassword" layoutX="153.0" layoutY="172.0" prefHeight="41.0" prefWidth="295.0" promptText="Password" />
+    <Label layoutX="148.0" layoutY="44.0" prefHeight="47.0" prefWidth="295.0" text="Welcome to Nile">
+      <font>
+        <Font name="Bell MT" size="42.0" />
+      </font>
+    </Label>
+  </children>
+  <padding>
+    <Insets />
+  </padding>
+</AnchorPane>
