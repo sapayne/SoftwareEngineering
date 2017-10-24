@@ -59,12 +59,12 @@ public class bTreeNode {
 	public int binarySearch(String name, int startingPointer, int endingPointer) {
 		int index = 0;
 		if(endingPointer-startingPointer > 1) {
-			if(name.compareToIgnoreCase(nodeArray((endingPointer-startingPointer)/2 + startingPointer)) < 0) {
-				return binarySearch(name, startingPointer, (endingPointer-startingPointer)/2 + startingPointer);
+			if(name.compareToIgnoreCase(nodeArray((endingPointer-startingPointer)/2 + startingPointer)) == 0) {
+				return ((endingPointer-startingPointer)/2 + startingPointer + 10) * (-1);	//if the index is less than -1 then the index = index * -1 -10
 			} else if(name.compareToIgnoreCase(nodeArray((endingPointer-startingPointer)/2 + startingPointer)) > 0) {
 				return binarySearch(name, (endingPointer-startingPointer)/2 + startingPointer, endingPointer);
 			} else {
-				index = (endingPointer-startingPointer)/2 + startingPointer;
+				return binarySearch(name, startingPointer, (endingPointer-startingPointer)/2 + startingPointer);
 			}
 		} else {
 			if(name.compareToIgnoreCase(nodeArray((endingPointer-startingPointer)/2 + startingPointer)) < 0) {

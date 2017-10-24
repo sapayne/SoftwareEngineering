@@ -27,6 +27,18 @@ public class bPlusTree {
 	 * than bTree node. Last it calls leafUpdate function which connects all the leaf bTree nodes together.
 	 */
 	private void split(bTreeNode nodeToSplit) {
+		/* if the node to split is the tree root make two new bTree nodes, if not make one bTree node to the 
+		 * that will take the greater than midpoint values. Then insert the reference to the parent bTree node's
+		 * children array using the standard insort method implemented in this current class (bPlusTree).	
+		 */
+		if(nodeToSplit == treeRoot) {
+			
+		} else {
+			/* might not be needed if insort is more generalized to accompany for insertion of nodes or bTree nodes
+			if(nodeToSplit.getParent().size() != nodeToSplit.getParent().getLength()-1){	//retrieves the size of the parent node, and checks if 
+			
+			}*/
+		}
 		bTreeNode lessThan = new bTreeNode(length);
 		bTreeNode greaterThanEqual = new bTreeNode(length);
 		for(int i = 0; i < length/2; i++) {
@@ -141,7 +153,7 @@ public class bPlusTree {
 		}
 	}
 	
-	//might not need 
+	//might not need if split updates the leaf nodes at the same time
 	public void leafUpdate() {
 		current = treeRoot;
 		while(current.children[0] instanceof bTreeNode) {
