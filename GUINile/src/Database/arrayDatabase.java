@@ -18,8 +18,7 @@ public class arrayDatabase {
 	public void removeName(String name) {
 		int index = findName(name);
 		userInformation[0][index] = null;
-        --nameSize;		
-		
+        --nameSize;			
 	}
 	
 	public int findName(String name) {
