@@ -39,6 +39,14 @@ import javafx.stage.Stage;
  */
 public class GUI extends Application {
     
+    String user = "dqsz@gsu.edu";
+    String password = "dqsz123";
+    String checkEmail, checkPass;
+    
+    public static void main(String[] args) {
+        launch(args);
+    }
+    
     @Override
     public void start(Stage loginStage) {
         
@@ -61,23 +69,23 @@ public class GUI extends Application {
         login.add(text2, 0,5);
         
         //creating textfield for email
-        TextField email = new TextField();
+        final TextField email = new TextField();
         email.setPromptText("email");
         login.add(email, 1,4);
         
         //creating the password textfield
-        PasswordField pass = new PasswordField();
+        final PasswordField pass = new PasswordField();
         pass.setPromptText("password");
         login.add(pass, 1,5);
-                
-        //Login error label
-        Label fail = new Label("Please Login");
-        login.add(fail, 1,7);
         
         //creating the login button after user inputs information
         Button loginButton = new Button("Login");
         login.add(loginButton, 1,8);
-        loginButton.setOnAction(event-> loginClicked(event));
+        loginButton.setId("loginButton");
+        
+        //Label to show if email and password are correct
+        final Label fail = new Label();
+        login.add(fail, 1,7);
         
         //Setting the padding  
         login.setPadding(new Insets(10, 10, 10, 10)); 
@@ -109,8 +117,15 @@ public class GUI extends Application {
         
         //closes all the windows when 'X' is pressed
         loginStage.setOnCloseRequest(e -> Platform.exit());
-    }
-    public void loginClicked(ActionEvent event){
+        
+    loginButton.setOnAction(new EventHandler<ActionEvent>(){
+    public void handle(ActionEvent event) {
+        //Determines if email and password are correct
+        checkEmail = email.getText().toString();
+        checkPass = pass.getText().toString();
+        if(checkEmail.equals(user) && checkPass.equals(password)){
+        
+        
         //hides the login screen once login is successful
         ((Node)event.getSource()).getScene().getWindow().hide();
         Stage home = new Stage();
@@ -119,7 +134,7 @@ public class GUI extends Application {
         home.setTitle("Home Page");
         
         //Stage dimensions
-        home.setWidth(1000);
+        home.setWidth(1010);
         home.setHeight(700);
         
         AnchorPane root = new AnchorPane();
@@ -211,14 +226,17 @@ public class GUI extends Application {
         //display home page
         home.setScene(scene);
         home.show();
+        }
+        else{
+           fail.setText("Incorrect email and/or password");
+           fail.setTextFill(Color.RED);
+        }
+        email.setText("");
+        pass.setText("");
     }
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
-    
+});
 }
+}
+    
+
 
