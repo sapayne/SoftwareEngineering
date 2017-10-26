@@ -1,5 +1,5 @@
 package softwareEngineering;
-
+       
 public class arrayDatabase {
 	private int nameSize = 0;
 	private int shippingSize = 0;
@@ -18,7 +18,8 @@ public class arrayDatabase {
 	public void removeName(String name) {
 		int index = findName(name);
 		userInformation[0][index] = null;
-        --nameSize;			
+        --nameSize;		
+		
 	}
 	
 	public int findName(String name) {
