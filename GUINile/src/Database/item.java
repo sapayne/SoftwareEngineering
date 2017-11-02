@@ -1,4 +1,4 @@
-package softwareEngineering;
+package Database;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,9 +24,9 @@ public class item {
 		System.out.println(fileName);
 		List<itemInformation> items = new ArrayList<>();
 		Path pathToFile = Paths.get(fileName);
-		
+
 		try (BufferedReader br = Files.newBufferedReader(pathToFile, StandardCharsets.US_ASCII)) {
-			
+
 			String line = br.readLine();
 
 			while (line != null) {

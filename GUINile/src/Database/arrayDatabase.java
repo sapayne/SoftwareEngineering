@@ -1,5 +1,5 @@
-package softwareEngineering;
-       
+package Database;
+
 public class arrayDatabase {
 	private int nameSize = 0;
 	private int shippingSize = 0;
@@ -10,6 +10,22 @@ public class arrayDatabase {
 		userInformation = new String[4][5];
 	}
 	
+	public void add(String name, int index) {
+		switch(index) {
+		case 0:
+			userInformation[index][getNameSize()] = name;
+			nameSize++;
+		case 1:
+			
+		case 2:
+			
+		case 3:
+			
+			default:
+				
+		}
+	}
+	
 	public void addName(String name) {
 		userInformation[0][getNameSize()] = name;
 		nameSize++;
@@ -18,8 +34,7 @@ public class arrayDatabase {
 	public void removeName(String name) {
 		int index = findName(name);
 		userInformation[0][index] = null;
-        --nameSize;		
-		
+        --nameSize;			
 	}
 	
 	public int findName(String name) {

@@ -1,4 +1,4 @@
-package softwareengineering;
+package application;
 
 
 import javafx.application.Application;

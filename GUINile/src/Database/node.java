@@ -1,13 +1,15 @@
 package Database;
 
-public class node {
+//Written By Samuel Payne
+
+public class Node {
 	/*	private global variables so that the objects that make references to the node class/object aren't able to 
 	 *	access the variables directly.
 	 */
 	private String name;
 	private String index;
 	
-	public node(){
+	public Node(){
 		//sets item name and item index to null
 		this.name = null;
 		this.index = null;	
