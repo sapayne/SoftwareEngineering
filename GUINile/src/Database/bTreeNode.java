@@ -56,7 +56,7 @@ public class BTreeNode {
 	}
 	
 	//allows content shifting left to right, right to left, and no shift
-	public void contentShift() {
+	public void contentShift(int startingIndex, int endingIndex) {
 		
 	}
 	
