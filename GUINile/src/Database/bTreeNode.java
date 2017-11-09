@@ -30,39 +30,93 @@ public class BTreeNode {
 	}
 	
 	//adds the pointer to the node containing the object information and the name of the object in the next index
-	public void addChild(Object nodeToTest) {
+	public void addChild(Node node) {
 		int index;
-		if(nodeToTest instanceof Node) {
-			Node current =(Node) nodeToTest;
-			index = binarySearch(current.getName(), 0, size());
-			for(int i = size()-1; i >= index; i--) {
-				children[i+1] = children[i];
-				contents[i] = contents[i-1];
+		Node current = node;
+		index = binarySearch(current.getName(), 0, size());
+		childShift(index + 1, size());
+		contentShift(index, size() - 1);
+		children[index + 1] = current;
+		contents[index] = current.getName();
+		size++;
+	}
+	
+	//adds the pointer to the node containing the object information and the name of the object in the next index
+	public void addChild(BTreeNode treeNode) {
+		int index;
+		BTreeNode parent;
+		String name = treeNode.contents[0]; 
+		parent = treeNode.getParent();
+		index = binarySearch(name,0,size());
+		parent.childShift(index + 1, parent.size());
+		parent.contentShift(index, parent.size() - 1);
+		parent.setChild(treeNode, index + 1);
+		parent.setContents(name, index);
+	}
+	
+	public void removeChild(Node node) {
+		int index, parentIndex;
+		Node current = node;
+		String name = node.getName();
+		index = binarySearch(current.getName(), 0, size());
+		/*	if the index returned is 0, then we will have to update the parent node's content value and 
+		 * 	the child value
+		 */
+		if(index == 0) {
+			if(getParent() != null) {
+				BTreeNode parent = getParent();
+				parentIndex = parent.binarySearch(name, 0, parent.size());
+				if(parentIndex == 0) {
+					//remove contents[index] and children[index + 1]
+				}
+				parent.setContents(contents[0], parentIndex);
+				parent.setChild(children[1], parentIndex);
 			}
-			children[index] = current;
-			contents[index-1] = current.getName();
-			
-		} 
-		if(nodeToTest instanceof BTreeNode) {
-			BTreeNode current = ((BTreeNode) nodeToTest);
-			index = binarySearch(current.contents[0],0,size());
-			for(int i = size()-1; i >= index; i--) {
-				children[i+1] = children[i];
-				contents[i] = contents[i-1];
-			}
-			children[index] = current;
-			contents[index-1] = current.contents[0];
+			childShift(size, 0);
+			contentShift(size - 1, 0);
+		} else {
+			childShift(size, index);
+			contentShift(size - 1, index);
 		}
+		contents[size - 1] = null;
+		children[size] = null;
+	}
+	
+	public void removeChild(BTreeNode treeNode) {
+		int index = binarySearch(treeNode.contents[0], 0, size);
+		contentShift(index, size - 1);
+		childShift(index, size);
+		contents[index] = null;
+		children[index] = null;
+		size--;
 	}
 	
 	//allows content shifting left to right, right to left, and no shift
-	public void contentShift(int startingIndex, int endingIndex) {
-		
+	private void contentShift(int startingIndex, int endingIndex) {
+		if(startingIndex < endingIndex) {
+			for(int i = endingIndex; i > startingIndex; i--) {
+				contents[i] = contents[i - 1];
+			}
+			contents[endingIndex] = null;
+		} else if(startingIndex > endingIndex) {
+			for(int i = endingIndex; i < startingIndex; i++) {
+				contents[i] = contents[i + 1];
+			}
+		}
 	}
 	
 	//three cases allowing for no shift, shift left, and shift right
-	public void childShift(int startingIndex, int endingIndex) {
-		
+	private void childShift(int startingIndex, int endingIndex) {
+		if(startingIndex < endingIndex) {
+			for(int i = endingIndex; i > startingIndex; i--) {
+				children[i] = children[i - 1];
+			}
+			children[endingIndex] = null;
+		} else if(startingIndex > endingIndex) {
+			for(int i = endingIndex; i < startingIndex; i++) {
+				children[i] = children[i + 1];
+			}
+		}
 	}
 	
 	// sets the index of the children Object array
@@ -79,13 +133,10 @@ public class BTreeNode {
 	public int search(String name) {
 		for(int i = 0; i < size(); i++) {
 			if(name.compareToIgnoreCase(contents[i]) < 0) {
-				return i-1;
+				return i;
 			} 
 		}
-		if(name.compareToIgnoreCase(contents[size()]) > 0) {
-			return size();
-		}
-		return -1;
+		return size();
 	}
 	
 	//only works if the array is all of type string, since if iterated through an object array it will return

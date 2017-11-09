@@ -72,9 +72,8 @@ public class BPlusTree {
 			BTreeNode parent = new BTreeNode(length);
 			nodeToSplit.setParent(parent);
 			greaterThanEqual.setParent(parent);
-			parent.setContents(greaterThanEqual.getContents(0),0);
 			parent.setChild(nodeToSplit, 0);
-			parent.setChild(greaterThanEqual, 1);
+			parent.addChild(greaterThanEqual);
 			parent.incSize();
 		} else {
 			//pass middle content value to parent btree node using add()
@@ -90,47 +89,52 @@ public class BPlusTree {
 		}
 	}
 	
-	//inserts and sorts the new item to the database, if the item doesn't already exist
-	public void insort(String name, String index) { //Object input
-		Object input = "";
-		//REDO - code for the insertion of an object then test if that object is a node or a bTree Node
-		
-		//first test the size of the B+Tree, if size is less than length then you know you will be adding
-		//a node, else it could be either. 
-		
-		//second search for the name in the B+Tree, to see if it already exists or where the new node 
-		//will be placed or the BTreeNode will be placed
-		
-		if(input instanceof Node) {
-			
-		} else if(input instanceof BTreeNode){
-			//current = (BTreeNode)input.getParent();
+	//	inserts the node at the correct index
+	private void insort(Node node) {
+		Object[] indexToInsert = search(node.getName());
+		current = (BTreeNode)indexToInsert[0];
+		/*	don't need a special case for index 0 as the name to insert would always go to the BTreeNode to 
+		 *	the left of the current if it is less than the current BTreeNode
+		 */
+		if(current.size() == length) { //prevents out of bounds exception for the contentShift method
+			split(current);
+			indexToInsert = search(node.getName());
+			current = (BTreeNode)indexToInsert[0];
+		} 
+		current.addChild(node);
+		size++;
+	}
+	
+	//	inserts the BTreeNode at the correct index
+	private void insort(BTreeNode bTreeNode) {
+		Object[] indexToInsert = search(bTreeNode.getContents(0));
+		current = (BTreeNode)indexToInsert[0];
+		if(current.size() == length) {
+			split(current);
+			indexToInsert = search(bTreeNode.getContents(0));
+			current = (BTreeNode)indexToInsert[0];
 		}
-		
-		
-		
+		current.addChild(bTreeNode);
+	}
+	
+	protected void add(String name, String index) {
 		if(isEmpty()) {
 			treeRoot = new BTreeNode(length);
 			current = treeRoot;
 			node.setName(name);
 			node.setIndex(index);
-			current.addChild(node);
-			current.incSize();
+			insort(node);
 			size++;
-		} else {
+		}else {
 			//call search to see if it exists, if not add it to the bPlusTree
 			Object[] temp = search(name);
 			current = (BTreeNode) temp[0];
-			if(current == null) {
-				current.addChild(node);
-			}
 			if (current.size() == current.getLength()) {
 				split(current);
 			} else {
 				node.setName(name);
 				node.setIndex(index);
-				current.addChild(node);
-				current.incSize();
+				insort(node);
 				size++;
 			}
 		}
@@ -144,22 +148,19 @@ public class BPlusTree {
 	public Object[] search(String name) {
 		Object[] array = new Object[2];
 		current = treeRoot;
-		boolean loop = true;
 		do {	
-
 			if(isLeaf(current)) {
 				// call binary search of the current btree node, and return the current node with the index
-				array[0] = current;
-				array[1] = current.binarySearch(name, 0, current.size());
-				loop = false;
+				array[0] = current; //BTreeNode 
+				array[1] = current.binarySearch(name, 0, current.size()); //Index where the name is found in the BTreeNode  
+				//returns the BTreeNode and the index to find the element or insert the element
+				return array;
 			} else {
 				// find which child branch to transverse to using binary search of the current btree node  
 				current = (BTreeNode) current.getChild(current.binarySearch(name, 0, current.size()));
 			}
 			
-		} while(loop == true);
-		
-		return array; //returns the BTreeNode and the index to find the element or insert the element
+		} while(true);
 	}
 	
 	//goes as far down to the left as possible then starts printing values from the furtherest left to the 
@@ -202,6 +203,9 @@ public class BPlusTree {
 	public String[] printSimilar(String name, int range) {
 		String[] array;
 		Object[] similarName = search(name);
+		current = ((BTreeNode)similarName[0]);
+		int index = (int)similarName[1];
+		
 		if(range < 0) {
 			range *= -1;
 			array = new String[range];
@@ -215,7 +219,9 @@ public class BPlusTree {
 			}
 		} else {
 			array = new String[1];
-			array[0] = name;
+			if(current.getContents(index).equalsIgnoreCase(name)) {
+				array[0] = name;
+			}
 		}
 		return array;
 	}
@@ -227,73 +233,56 @@ public class BPlusTree {
 		return array;
 	}
 	
-	//might not need if split updates the leaf nodes at the same time
-	public void leafUpdate() {
-		current = treeRoot;
-		while(current.getChild(0) instanceof BTreeNode) {
-			current = (BTreeNode) current.getChild(0);
-		}
-		current = current.getParent();
-	}
-	
-	public void rootUpdate() {
+	private void rootUpdate() {
 		while(treeRoot.getParent() != null) {
 			treeRoot = treeRoot.getParent();
 		}	
 	}
 	
 	//deletes the item from the database
-	public void delete(String name) {
+	protected void delete(String name) {
 		Object[] btreenode = search(name);
 		current = (BTreeNode) btreenode[0];
 		int index = (int)btreenode[1];
-		if(((Node)current.getChild(index)).getName().equalsIgnoreCase(name)) {
-
-			if(index < current.size()) {
-				for(int i = index; i < current.size(); i++) {
-					current.setContents(current.getContents(index),index - 1);
-					current.setChild(current.getChild(index + 1), index);
-				}
-				if (index == 0) {
-					//write code to handle if the first element is deleted, meaning that the parent's contents array
-					//has to be updated
-				}
-				current.setContents(null,index);
-				current.setChild(null, index + 1);
-				current.decSize();
-				size--;
-			} else {
-				current.setChild(null, index);
-				current.decSize();
-				size--;
-			}
-			//size--;
+		Node nodeToDelete = ((Node)current.getChild(index));
+		if(nodeToDelete.getName().equalsIgnoreCase(name)) {
+			removeChild(nodeToDelete);
 			if((current.getLeftSibling().size() + current.size()) < length) {
 				merge(current.getLeftSibling(),current);
 			} else if((current.size() + current.getRightSibling().size()) < length) {
 				merge(current,current.getRightSibling());
 			}
 		}
-		
-		//searches for the item by name then removes it from the bPlusTree
 	}
 	
 	// every time a value is deleted from the BPlusTree, it checks in delete if the size of the right or left
 	// sibling's size plus it's own size is less than length, if so it merges the two nodes who's combined size
 	// is less than the length and then updates the parent BTreeNode of those two, the children and contents
-	public void merge(BTreeNode left, BTreeNode right) {
-		//hellooooo
+	private void merge(BTreeNode left, BTreeNode right) {
+		if(left.size() + right.size() < length) {
+			for(int i = 0; i < right.size(); i++) {
+				left.setContents(right.getContents(i), left.size() + i);
+				left.setChild(right.getChild(i), left.size() + i + 1);
+			}
+			if(right.getRightSibling() != null) {
+				left.setRightSibling(right.getRightSibling());
+			}
+			BTreeNode parent = left.getParent();
+			parent.removeChild(right);
+			left.setSize(left.size() + right.size());
+		}
+		
 	}
 	
 	public int size() {
 		return size;
 	}
 	
-	public boolean isLeaf(BTreeNode current) {
+	private boolean isLeaf(BTreeNode current) {
 		return current.getChild(0) instanceof Node;
 	}
 	
-	public boolean isEmpty() {
+	private boolean isEmpty() {
         return treeRoot == null;
     }
 	
