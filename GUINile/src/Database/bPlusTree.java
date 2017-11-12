@@ -89,6 +89,7 @@ public class BPlusTree {
 		}
 	}
 	
+	//	reevaluate how insort for nodes works
 	//	inserts the node at the correct index
 	private void insort(Node node) {
 		Object[] indexToInsert = search(node.getName());
@@ -137,6 +138,18 @@ public class BPlusTree {
 				insort(node);
 				size++;
 			}
+		}
+	}
+	
+	public String databaseIndex(String name) {
+		Object[] item = search(name);
+		BTreeNode treeNode = (BTreeNode)item[0];
+		int index = (int)item[1];
+		if(treeNode.getContents(index).equalsIgnoreCase(name)) {
+			Node node = (Node)treeNode.getChild(index);
+			return node.getIndex();
+		} else {
+			return null;
 		}
 	}
 	
@@ -221,11 +234,15 @@ public class BPlusTree {
 			array = new String[1];
 			if(current.getContents(index).equalsIgnoreCase(name)) {
 				array[0] = name;
+			} else {
+				array[0] = "no results";
 			}
 		}
 		return array;
 	}
 	
+	//searches the tree then determines what category the item belongs too, then prints the other items in that
+	//category that come alphabetically after the item returned
 	public Node[] returnSimilar(String name, int range) {
 		Node[] array = new Node[range]; //determined by how many results can be displayed per page
 		
@@ -246,7 +263,7 @@ public class BPlusTree {
 		int index = (int)btreenode[1];
 		Node nodeToDelete = ((Node)current.getChild(index));
 		if(nodeToDelete.getName().equalsIgnoreCase(name)) {
-			removeChild(nodeToDelete);
+			current.removeChild(nodeToDelete);
 			if((current.getLeftSibling().size() + current.size()) < length) {
 				merge(current.getLeftSibling(),current);
 			} else if((current.size() + current.getRightSibling().size()) < length) {
@@ -255,9 +272,10 @@ public class BPlusTree {
 		}
 	}
 	
-	// every time a value is deleted from the BPlusTree, it checks in delete if the size of the right or left
-	// sibling's size plus it's own size is less than length, if so it merges the two nodes who's combined size
-	// is less than the length and then updates the parent BTreeNode of those two, the children and contents
+	/* every time a value is deleted from the BPlusTree, it checks in delete if the size of the right or left
+	 * sibling's size plus it's own size is less than length, if so it merges the two nodes who's combined size
+	 * is less than the length and then updates the parent BTreeNode of those two, the children and contents. 
+	 */
 	private void merge(BTreeNode left, BTreeNode right) {
 		if(left.size() + right.size() < length) {
 			for(int i = 0; i < right.size(); i++) {

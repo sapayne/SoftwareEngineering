@@ -12,7 +12,7 @@ public class BTreeNode {
 	private Object[] children;
 	private int size; 			//size of treeNode, which is equal to the amount of nodes in it
 	
-	public BTreeNode(int length) {
+	protected BTreeNode(int length) {
 		parent = null;
 		/* 	Siblings are only used if the bTreeNode has no children, also known as a leaf node, as
 		 * 	this will connect the lowest level nodes together as a way of returning the range of 
@@ -30,19 +30,19 @@ public class BTreeNode {
 	}
 	
 	//adds the pointer to the node containing the object information and the name of the object in the next index
-	public void addChild(Node node) {
+	protected void addChild(Node node) {
 		int index;
 		Node current = node;
 		index = binarySearch(current.getName(), 0, size());
 		childShift(index + 1, size());
 		contentShift(index, size() - 1);
-		children[index + 1] = current;
 		contents[index] = current.getName();
+		children[index + 1] = current;
 		size++;
 	}
 	
 	//adds the pointer to the node containing the object information and the name of the object in the next index
-	public void addChild(BTreeNode treeNode) {
+	protected void addChild(BTreeNode treeNode) {
 		int index;
 		BTreeNode parent;
 		String name = treeNode.contents[0]; 
@@ -54,7 +54,7 @@ public class BTreeNode {
 		parent.setContents(name, index);
 	}
 	
-	public void removeChild(Node node) {
+	protected void removeChild(Node node) {
 		int index, parentIndex;
 		Node current = node;
 		String name = node.getName();
@@ -62,37 +62,48 @@ public class BTreeNode {
 		/*	if the index returned is 0, then we will have to update the parent node's content value and 
 		 * 	the child value
 		 */
-		if(index == 0) {
+		if(index == 0) { //might not need this check, if the children are stored in the same array index as contents
 			if(getParent() != null) {
 				BTreeNode parent = getParent();
 				parentIndex = parent.binarySearch(name, 0, parent.size());
 				if(parentIndex == 0) {
-					//remove contents[index] and children[index + 1]
+					// remove contents[index] and children[index + 1] and replace them with contents[size/2]
+					// and children[size/2 + 1]
 				}
 				parent.setContents(contents[0], parentIndex);
 				parent.setChild(children[1], parentIndex);
 			}
-			childShift(size, 0);
-			contentShift(size - 1, 0);
-		} else {
-			childShift(size, index);
+			childShift(size, index + 1);
+			contentShift(size - 1, index);
+		} else {	//part of the if check that might not be needed
+			childShift(size, index + 1);
 			contentShift(size - 1, index);
 		}
 		contents[size - 1] = null;
 		children[size] = null;
+		size--;
 	}
 	
-	public void removeChild(BTreeNode treeNode) {
+	protected void removeChild(BTreeNode treeNode) {
 		int index = binarySearch(treeNode.contents[0], 0, size);
+		/*	shifts contents and children pointers, ultimately writing over the reference in contents[index] and 
+		 * 	children[index].
+		 */
 		contentShift(index, size - 1);
-		childShift(index, size);
-		contents[index] = null;
-		children[index] = null;
+		childShift(index + 1, size);
 		size--;
+		/* 	removes the reference that is now duplicated in contents[size-1] and contents[size], same with 
+		 * 	the children pointer array, and only leaves the contents[size-1] reference and children[size] 
+		 * 	reference.
+		 */
+		contents[size] = null;
+		children[size + 1] = null;
 	}
 	
 	//allows content shifting left to right, right to left, and no shift
 	private void contentShift(int startingIndex, int endingIndex) {
+		// only has two test case because if there is no shift, the starting and ending index are the same,
+		// the add or delete function will add or remove the element at the index.
 		if(startingIndex < endingIndex) {
 			for(int i = endingIndex; i > startingIndex; i--) {
 				contents[i] = contents[i - 1];
@@ -120,17 +131,17 @@ public class BTreeNode {
 	}
 	
 	// sets the index of the children Object array
-	public void setChild(Object child, int index) {
+	protected void setChild(Object child, int index) {
 		children[index] = child;
 	}
 	
 	//returns the Object in the children array at the index passed
-	public Object getChild(int index) {
+	protected Object getChild(int index) {
 		return children[index];
 	}
 	
-	//only used if the length is a small enough number
-	public int search(String name) {
+	//only used if the length is a small enough number that the binarySearch function is not relevant
+	protected int search(String name) {
 		for(int i = 0; i < size(); i++) {
 			if(name.compareToIgnoreCase(contents[i]) < 0) {
 				return i;
@@ -141,7 +152,7 @@ public class BTreeNode {
 	
 	//only works if the array is all of type string, since if iterated through an object array it will return
 	//the java provided name for the pointer in memory thus leading to some unwanted results.
-	public int binarySearch(String name, int startingPointer, int endingPointer) {
+	protected int binarySearch(String name, int startingPointer, int endingPointer) {
 		if(endingPointer-startingPointer > 1) {
 			/* The if statement checks if the value enter is less than the value currently being checked.
 			 * The else if statement checks if the value entered is greater than the value currently being checked.
@@ -173,76 +184,76 @@ public class BTreeNode {
 	}
 	
 	//returns the length the children array, that is used to hold the strings, nodes, and bTree nodes.
-	public int getLength() {
+	protected int getLength() {
 		return children.length;
 	}
 	
 	// increases the counter of the number of nodes presently in the bTree node
-	public void incSize() {
+	protected void incSize() {
 		size++;
 	}
 	
 	// decreases the counter of the number of nodes presently in the bTree node
-	public void decSize() {
+	protected void decSize() {
 		size--;	
 	}
 	
 	//returns the number of nodes in the bTree node
-	public int size() {
+	protected int size() {
 		return size;
 	}
 	
 	//allows the split method in the bPlusTree class to set the size of each child node
-	public void setSize(int size) {
+	protected void setSize(int size) {
 		this.size = size;	
 	}
 	
 	//returns the string value located at the index passed
-	public String getContents(int index) {
+	protected String getContents(int index) {
 		return contents[index];
 	}
 	
 	//sets the value of the content at a certain index for the BTreeNode
-	public void setContents(String name, int index) {
+	protected void setContents(String name, int index) {
 		contents[index] = name;
 	}
 
 	//returns if the bTree node has nodes in it or not
-	public boolean isEmpty() {
+	protected boolean isEmpty() {
         return size() == 0;
     }
 	
 	//points the bTree node to its parent bTree node if it isn't the root bTree node
-	public void setParent(BTreeNode parent) {
+	protected void setParent(BTreeNode parent) {
 		this.parent = parent;
 	}
 	
 	//returns the parent of the current bTree node selected
-	public BTreeNode getParent() {
+	protected BTreeNode getParent() {
 		return parent;
 	}
 	
 	//sets the right sibling to the next leaf bTree node
-	public void setRightSibling(BTreeNode sibling) {
+	protected void setRightSibling(BTreeNode sibling) {
 		rightSibling = sibling;
 	}
 	
 	/*	returns the leaf bTree node that is connected to the current bTree node's right pointer,
 	 *	the bTree node that contains elements less than the current bTree node.
 	 */
-	public BTreeNode getRightSibling() {
+	protected BTreeNode getRightSibling() {
 		return rightSibling;
 	}
 	
 	//sets the left sibling to the previous leaf bTree node
-	public void setLeftSibling(BTreeNode sibling) {
+	protected void setLeftSibling(BTreeNode sibling) {
 		leftSibling = sibling;
 	}
 	
 	/*	returns the leaf bTree node that is connected to the current bTree node's left pointer, 
 	 *	the BTree node that contains elements less than the current bTree node. 
 	 */
-	public BTreeNode getLeftSibling() {
+	protected BTreeNode getLeftSibling() {
 		return leftSibling;
 	}
 }
