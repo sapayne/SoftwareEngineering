@@ -65,17 +65,17 @@ public class accountScreen  {
                 GridPane.setConstraints(homeButton, 0, 0);
                 
                         //creating the category select drop down box when a category is selected
-                        String blank = new String("All");
-                        String electronics = new String("Electronics");
-                        String appliances = new String("Appliances");
-                        String automotive = new String("Automotive");
-                        String games = new String("Software & Games");
-                        String baby = new String("Baby");
-                        String arts = new String("Arts & Crafts");
-                        String books = new String("Books");
-                        String movies = new String("Movies");
-                        String clothes = new String("Clothes");
-                        String outdoors = new String("Outdoors");
+                        String blank = "All";
+                        String electronics = "Electronics";
+                        String appliances = "Appliances";
+                        String automotive = "Automotive";
+                        String games = "Software & Games";
+                        String baby = "Baby";
+                        String arts = "Arts & Crafts";
+                        String books = "Books";
+                        String movies = "Movies";
+                        String clothes = "Clothes";
+                        String outdoors = "Outdoors";
                         Separator separator = new Separator();
         
                         ObservableList<?> categories = FXCollections.observableArrayList(blank, separator, electronics, 
@@ -100,6 +100,25 @@ public class accountScreen  {
 		
                         //Row of Buttons and drop down for the task bar on the Nile 
                         Button browHist = new Button("Browsing History");
+                        browHist.setOnAction(e-> {
+                    //hides the login screen once login is successful
+                    ((Node)e.getSource()).getScene().getWindow().hide();
+                    Parent browseScreen = new browsingScreen().getView();
+                    Stage browse = new Stage();
+                    browse.initOwner(browHist.getScene().getWindow());
+                    //display home page
+                    
+                    Scene browseScene = new Scene(browseScreen, 1600, 900);
+                    browse.setScene(browseScene);
+                    Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+
+                    //set Stage boundaries to visible bounds of the main screen
+                    browse.setX(primaryScreenBounds.getMinX());
+                    browse.setY(primaryScreenBounds.getMinY());
+                    browse.setWidth(primaryScreenBounds.getWidth());
+                    browse.setHeight(primaryScreenBounds.getHeight());
+                    browse.show();
+                });
                         GridPane.setConstraints(browHist, 0, 1);
 		
                         Button todayDeal = new Button("Today's Deal");
@@ -126,6 +145,7 @@ public class accountScreen  {
                         langSelect.getItems().add("German");
                         langSelect.getItems().add("Italian");
                         langSelect.getItems().add("Spanish");
+                        langSelect.getSelectionModel().selectFirst();
                         GridPane.setConstraints(langSelect, 5, 1);
 		
                         Button yourAcc = new Button("Your Account");

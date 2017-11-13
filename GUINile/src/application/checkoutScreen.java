@@ -45,7 +45,8 @@ public class checkoutScreen {
 		nameBox.getItems().add("Dudes Wife");	
 		nameBox.getItems().add("Dudes Kid");	
 		nameBox.getItems().add("Dudes Kid 2");	
-		nameBox.getItems().add("Dudes Kid 3");	
+		nameBox.getItems().add("Dudes Kid 3");
+                nameBox.getSelectionModel().selectFirst();	
 		GridPane.setConstraints(nameBox,  2 ,  1 );
 		
 		//allows the user to choose from a list of addresses
@@ -65,6 +66,7 @@ public class checkoutScreen {
 		shipBox.getItems().add("1235 Somewhere Dr" 
 				+ " Nowhere, GA 12345"
 				+ " United States");
+                shipBox.getSelectionModel().selectFirst();
 		GridPane.setConstraints(shipBox,  3 ,  1 );
 		
 		//Displays the card used and billing address 
@@ -77,7 +79,8 @@ public class checkoutScreen {
 		cardBox.getItems().add("AMEX ending in 1001");	
 		cardBox.getItems().add("DISC ending in 1234");	
 		cardBox.getItems().add("VISA ending in 7894");	
-		cardBox.getItems().add("MAST ending in 4567");	
+		cardBox.getItems().add("MAST ending in 4567");
+                cardBox.getSelectionModel().selectFirst();	
 		GridPane.setConstraints(cardBox,  2 ,  2 );
 		
 		//List of Billing Addresses on file
@@ -97,6 +100,7 @@ public class checkoutScreen {
 		billBox.getItems().add("1235 Somewhere Dr" 
 				+ " Nowhere, GA 12345"
 				+ " United States");
+                billBox.getSelectionModel().selectFirst();
 		GridPane.setConstraints(billBox,  3 ,  2 );
 		
 		// Displays items and shipping on the GUI
@@ -110,6 +114,7 @@ public class checkoutScreen {
 		shiptypeBox.getItems().add("Kinda Fast");
 		shiptypeBox.getItems().add("Slow");
 		shiptypeBox.getItems().add("Really Slow");
+                shiptypeBox.getSelectionModel().selectFirst();
 		GridPane.setConstraints(shiptypeBox, 2, 3);
 		
 		//The name of item bought and the price 

@@ -14,7 +14,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -30,18 +29,19 @@ import javafx.stage.Stage;
  *
  * @author qmorr
  */
-public class homeScreen {
-    private GridPane home;
+public class browsingScreen {
+    private GridPane browse;
     private HBox hb;
     private HBox hb2;
+    private HBox hb3;
+    private HBox hb4;
     
-    public homeScreen() {
-        
-        //sizing and spacing of the GUI
-		home = new GridPane();
-		home.setPadding(new Insets(10, 10, 10, 10));
-		home.setVgap(12);
-		home.setHgap(10);
+    
+    public browsingScreen(){
+        browse = new GridPane();
+		browse.setPadding(new Insets(10, 10, 10, 10));
+		browse.setVgap(12);
+		browse.setHgap(10);
 		
                 //Label of the home button
                 Button homeButton = new Button("Home");
@@ -197,85 +197,129 @@ public class homeScreen {
                     });
 		GridPane.setConstraints(cartButton, 8, 1);
                 
-                ImageView imageView1 = new ImageView(new Image("https://blog.logoscdn.com/wp-content/uploads/Christmas-January-6.png"));
+                Text browseh = new Text("Browsing History");
+                browseh.setFont(Font.font ("Verdana", 24));
+                browse.add(browseh, 2, 10);
+                
+                ImageView imageView1 = new ImageView(new Image("https://store.storeimages.cdn-apple.com/4974/as-images.apple.com/is/image/AppleInc/aos/published/images/M/AC/MACBOOKPRO/MACBOOKPRO?wid=1879&hei=1061&fmt=jpeg&qlt=95&op_sharpen=0&resMode=bicub&op_usm=0.5,0.5,0,0&iccEmbed=0&layer=comp&.v=6xyk93"));
                 Button image1 = new Button();
                 image1.setGraphic(imageView1);
-                imageView1.setFitWidth(1000);
-                imageView1.setFitHeight(200);
-                GridPane.setConstraints(image1, 2, 10);
+                imageView1.setFitWidth(250);
+                imageView1.setFitHeight(150);
                 
-                Text browse = new Text("Recently Viewed Items");
-                browse.setFont(Font.font ("Verdana", 18));
-                home.add(browse, 2, 11);
-                
-                ImageView imageView2 = new ImageView(new Image("https://store.storeimages.cdn-apple.com/4974/as-images.apple.com/is/image/AppleInc/aos/published/images/M/AC/MACBOOKPRO/MACBOOKPRO?wid=1879&hei=1061&fmt=jpeg&qlt=95&op_sharpen=0&resMode=bicub&op_usm=0.5,0.5,0,0&iccEmbed=0&layer=comp&.v=6xyk93"));
+                ImageView imageView2 = new ImageView(new Image("https://store.storeimages.cdn-apple.com/4974/as-images.apple.com/is/image/AppleInc/aos/published/images/a/lu/alu/silver/alu-silver-sport-fog-2up?wid=470&hei=556&fmt=png-alpha&qlt=95&.v=1506624085308"));
                 Button image2 = new Button();
                 image2.setGraphic(imageView2);
                 imageView2.setFitWidth(250);
                 imageView2.setFitHeight(150);
                 
-                
-                ImageView imageView3 = new ImageView(new Image("https://store.storeimages.cdn-apple.com/4974/as-images.apple.com/is/image/AppleInc/aos/published/images/a/lu/alu/silver/alu-silver-sport-fog-2up?wid=470&hei=556&fmt=png-alpha&qlt=95&.v=1506624085308"));
+                ImageView imageView3 = new ImageView(new Image("https://cdn.wccftech.com/wp-content/uploads/2017/08/Intel-Coffee-Lake-Core-i7-8700K.png"));
                 Button image3 = new Button();
                 image3.setGraphic(imageView3);
                 imageView3.setFitWidth(250);
                 imageView3.setFitHeight(150);
                 
-                ImageView imageView4 = new ImageView(new Image("https://cdn.wccftech.com/wp-content/uploads/2017/08/Intel-Coffee-Lake-Core-i7-8700K.png"));
+                ImageView imageView4 = new ImageView(new Image("http://jerryneutron.com/wp-content/uploads/2016/11/logitechgpro1.jpg"));
                 Button image4 = new Button();
                 image4.setGraphic(imageView4);
                 imageView4.setFitWidth(250);
                 imageView4.setFitHeight(150);
                 
-                ImageView imageView5 = new ImageView(new Image("http://jerryneutron.com/wp-content/uploads/2016/11/logitechgpro1.jpg"));
+                hb = new HBox(image1, image2, image3, image4);
+                hb.setSpacing(10);
+                GridPane.setConstraints(hb, 2, 11);
+                
+                ImageView imageView5 = new ImageView(new Image("https://www.containerstore.com/catalogimages/252328/10047828Duchess5HkOverdoorRackBrz_60.jpg?width=1200&height=1200&align=center"));
                 Button image5 = new Button();
                 image5.setGraphic(imageView5);
                 imageView5.setFitWidth(250);
                 imageView5.setFitHeight(150);
                 
-                ImageView imageView6 = new ImageView(new Image("https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RWbGIB?ver=5d58&q=60&m=6&h=423&w=752&b=%23FF171717&f=jpg&o=f"));
+                ImageView imageView6 = new ImageView(new Image("https://recyclenation.com/wp-content/uploads/2015/01/iStock_000015921027Medium.jpg"));
                 Button image6 = new Button();
                 image6.setGraphic(imageView6);
                 imageView6.setFitWidth(250);
                 imageView6.setFitHeight(150);
                 
-                ImageView imageView7 = new ImageView(new Image("https://images-na.ssl-images-amazon.com/images/I/91wN%2BdYA9dL._AC_SX430_.jpg"));
+                ImageView imageView7 = new ImageView(new Image("https://target.scene7.com/is/image/Target/50343077?wid=520&hei=520&fmt=pjpeg"));
                 Button image7 = new Button();
                 image7.setGraphic(imageView7);
                 imageView7.setFitWidth(250);
                 imageView7.setFitHeight(150);
                 
-                ImageView imageView8 = new ImageView(new Image("https://s.aolcdn.com/hss/storage/midas/f4ae086a2e446e01781baee1c703b95a/205656532/Belkin.jpg"));
+                ImageView imageView8 = new ImageView(new Image("https://images.samsclubresources.com/is/image/samsclub/0088133400961_A?$img_size_380x380$"));
                 Button image8 = new Button();
                 image8.setGraphic(imageView8);
                 imageView8.setFitWidth(250);
                 imageView8.setFitHeight(150);
                 
-                ImageView imageView9 = new ImageView(new Image("https://i.ytimg.com/vi/M_bub9QlI_U/maxresdefault.jpg"));
+                hb2 = new HBox(image5, image6, image7, image8);
+                hb2.setSpacing(10);
+                GridPane.setConstraints(hb2, 2, 12);
+                
+                ImageView imageView9 = new ImageView(new Image("http://cdn.pocket-lint.com/r/s/970x/assets/images/142246-phones-feature-best-iphone-x-cases-protect-your-new-apple-device-image2-xtreomy7gh.jpg"));
                 Button image9 = new Button();
                 image9.setGraphic(imageView9);
                 imageView9.setFitWidth(250);
                 imageView9.setFitHeight(150);
                 
-                hb = new HBox(image2, image3, image4, image5);
-                hb.setSpacing(10);
-                GridPane.setConstraints(hb, 2, 12);
+                ImageView imageView10 = new ImageView(new Image("https://m.media-amazon.com/images/S/aplus-media/vc/0377e23f-ae6c-41cd-9ffd-edb364cb7d96._SR285,285_.jpg"));
+                Button image10 = new Button();
+                image10.setGraphic(imageView10);
+                imageView10.setFitWidth(250);
+                imageView10.setFitHeight(150);
                 
-                Text newItems = new Text("New Items for You");
-                newItems.setFont(Font.font ("Verdana", 20));
-                home.add(newItems, 2, 13);
+                ImageView imageView11 = new ImageView(new Image("https://mobileimages.lowes.com/product/converted/047362/047362324276.jpg"));
+                Button image11 = new Button();
+                image11.setGraphic(imageView11);
+                imageView11.setFitWidth(250);
+                imageView11.setFitHeight(150);
                 
-                hb2 = new HBox(image6, image7, image8, image9);
-                hb2.setSpacing(10);
-                GridPane.setConstraints(hb2, 2, 14);
+                ImageView imageView12 = new ImageView(new Image("https://images-na.ssl-images-amazon.com/images/I/919wyzlfPPL._SL1500_.jpg"));
+                Button image12 = new Button();
+                image12.setGraphic(imageView12);
+                imageView12.setFitWidth(250);
+                imageView12.setFitHeight(150);
                 
-                home.setStyle("-fx-background-color: beige;");
-                home.getChildren().addAll(homeButton, categoryBox,searchBar, searchButton, browHist,
+                hb3 = new HBox(image9, image10, image11, image12);
+                hb3.setSpacing(10);
+                GridPane.setConstraints(hb3, 2, 13);
+                
+                ImageView imageView13 = new ImageView(new Image("https://target.scene7.com/is/image/Target/14782249?wid=520&hei=520&fmt=pjpeg"));
+                Button image13 = new Button();
+                image13.setGraphic(imageView13);
+                imageView13.setFitWidth(250);
+                imageView13.setFitHeight(150);
+                
+                ImageView imageView14 = new ImageView(new Image("https://s1.cdn.autoevolution.com/images/news/gallery/how-to-change-your-oil_3.png"));
+                Button image14 = new Button();
+                image14.setGraphic(imageView14);
+                imageView14.setFitWidth(250);
+                imageView14.setFitHeight(150);
+                
+                ImageView imageView15 = new ImageView(new Image("https://slimages.macysassets.com/is/image/MCY/products/2/optimized/2927532_fpx.tif?op_sharpen=1&wid=400&hei=489&fit=fit,1&$filterlrg$"));
+                Button image15 = new Button();
+                image15.setGraphic(imageView15);
+                imageView15.setFitWidth(250);
+                imageView15.setFitHeight(150);
+                
+                ImageView imageView16 = new ImageView(new Image("http://prodimage.images-bn.com/pimages/9780545162074_p0_v2_s1200x630.jpg"));
+                Button image16 = new Button();
+                image16.setGraphic(imageView16);
+                imageView16.setFitWidth(250);
+                imageView16.setFitHeight(150);
+                
+                hb4 = new HBox(image13, image14, image15, image16);
+                hb4.setSpacing(10);
+                GridPane.setConstraints(hb4, 2, 14);
+                
+                browse.getChildren().addAll(homeButton, categoryBox,searchBar, searchButton, browHist,
 				todayDeal, giftCard, sellButton, helpButton, langSelect, yourAcc,
-				ordersButton, cartButton, image1,  hb, hb2);
-        
+				ordersButton, cartButton, hb, hb2, hb3, hb4);
+                
+                browse.setStyle("-fx-background-color: beige;");
     }
     public Parent getView(){
-        return home;
+        return browse;
     }
 }

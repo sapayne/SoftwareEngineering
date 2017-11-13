@@ -38,16 +38,20 @@ public class infoScreen {
 	TextField shipInput1 = new TextField("Home");
 	GridPane.setConstraints(shipInput1, 1, 1);
 	
-	TextField shipInput2 = new TextField("(empty)");
+	TextField shipInput2 = new TextField();
+        shipInput2.setPromptText("empty");
 	GridPane.setConstraints(shipInput2, 2, 1);
 	
-	TextField shipInput3 = new TextField("(empty)");
+	TextField shipInput3 = new TextField();
+        shipInput3.setPromptText("empty");
 	GridPane.setConstraints(shipInput3, 3, 1);
 	
-	TextField shipInput4 = new TextField("(empty)");
+	TextField shipInput4 = new TextField();
+        shipInput4.setPromptText("empty");
 	GridPane.setConstraints(shipInput4, 4, 1);
 	
-	TextField shipInput5 = new TextField("(empty)");
+	TextField shipInput5 = new TextField();
+        shipInput5.setPromptText("empty");
 	GridPane.setConstraints(shipInput5, 5, 1);
 	
 	//List of Credit Cards on File
@@ -57,16 +61,20 @@ public class infoScreen {
 	TextField billingInput1 = new TextField("Home");
 	GridPane.setConstraints(billingInput1, 1, 2);
 	
-	TextField billingInput2 = new TextField("(empty)");
+	TextField billingInput2 = new TextField();
+        billingInput2.setPromptText("empty");
 	GridPane.setConstraints(billingInput2, 2, 2);
 	
-	TextField billingInput3 = new TextField("(empty)");
+	TextField billingInput3 = new TextField();
+        billingInput3.setPromptText("empty");
 	GridPane.setConstraints(billingInput3, 3, 2);
 	
-	TextField billingInput4 = new TextField("(empty)");
+	TextField billingInput4 = new TextField();
+        billingInput4.setPromptText("empty");
 	GridPane.setConstraints(billingInput4, 4, 2);
 	
-	TextField billingInput5 = new TextField("(empty)");
+	TextField billingInput5 = new TextField();
+        billingInput5.setPromptText("empty");
 	GridPane.setConstraints(billingInput5, 5, 2);
 	
 	//List of Payment Methods on File
@@ -76,16 +84,20 @@ public class infoScreen {
 	TextField payInput1 = new TextField("Visa 9999");
 	GridPane.setConstraints(payInput1, 1, 3);
 	
-	TextField payInput2 = new TextField("(empty)");
+	TextField payInput2 = new TextField();
+        payInput2.setPromptText("empty");
 	GridPane.setConstraints(payInput2, 2, 3);
 	
-	TextField payInput3 = new TextField("(empty)");
+	TextField payInput3 = new TextField();
+        payInput3.setPromptText("empty");
 	GridPane.setConstraints(payInput3, 3, 3);
 	
-	TextField payInput4 = new TextField("(empty)");
+	TextField payInput4 = new TextField();
+        payInput4.setPromptText("empty");
 	GridPane.setConstraints(payInput4, 4, 3);
 	
-	TextField payInput5 = new TextField("(empty)");
+	TextField payInput5 = new TextField();
+        payInput5.setPromptText("empty");
 	GridPane.setConstraints(payInput5, 5, 3);
 	
 	//ok button to confirm all settings
