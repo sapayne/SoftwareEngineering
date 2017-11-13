@@ -2,18 +2,17 @@ package softwareEngineering;
 
 public class Order {
 	
-	private String name, brand, category, description, image;
+	private String name, brand, description, image;
 	private double price, weight;
 	private int quantity;
 	Time time = new Time();
 	
-	public Order(String name, String brand, String category,
+	public Order(String name, String brand,
 			String description, String image, double price, double weight,
 			int quantity, Time time) {
 		super();
 		this.name = name;
 		this.brand = brand;
-		this.category = category;
 		this.description = description;
 		this.image = image;
 		this.price = price;
@@ -25,7 +24,6 @@ public class Order {
 	public Order() {
 		name = "";
 		brand = "";
-		category = "";
 		description = "";
 		image = "";
 		price = 0;
@@ -48,14 +46,6 @@ public class Order {
 
 	public void setBrand(String brand) {
 		this.brand = brand;
-	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
 	}
 
 	public String getDescription() {
