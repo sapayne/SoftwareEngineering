@@ -4,6 +4,8 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,23 +15,17 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class infoScreen extends Application{
-	Stage window;
+public class infoScreen {
+	private GridPane info;
 	
-	public static void main(String[] args) {
-		launch(args);
-	}
 	
-	@Override 
-	public void start(Stage primaryStage) throws Exception {
-		window = primaryStage;
-		window.setTitle("Info Screen");
-		
+	public infoScreen(){
+            
 		//Sizing and spacing of the GUi
-		GridPane grid = new GridPane();
-		grid.setPadding(new Insets(10, 10, 10, 10));
-		grid.setVgap(8);
-		grid.setHgap(10);
+		info = new GridPane();
+		info.setPadding(new Insets(10, 10, 10, 10));
+		info.setVgap(8);
+		info.setHgap(10);
 	
 	//Title of the GUI
 	Label pageTitle = new Label ("NILE - Personal Info");
@@ -94,6 +90,9 @@ public class infoScreen extends Application{
 	
 	//ok button to confirm all settings
 	Button okButton = new Button("ok");
+        okButton.setOnAction(e-> {
+            ((Node)e.getSource()).getScene().getWindow().hide();
+        });
 	GridPane.setConstraints(okButton, 7, 5);
 	
 	//buttons to add and delete information
@@ -117,20 +116,17 @@ public class infoScreen extends Application{
 	
 	
 	// adds all of these to the grid
-	grid.getChildren().addAll(pageTitle, shipLabel, shipInput1,  shipInput2, shipInput3, shipInput4, 
+	info.getChildren().addAll(pageTitle, shipLabel, shipInput1,  shipInput2, shipInput3, shipInput4, 
 			shipInput5, billingLabel, billingInput1, billingInput2, billingInput3, billingInput4, 
 			billingInput5, payLabel, payInput1, payInput2, payInput3, payInput4, payInput5, addShip,
 			deleteShip, addBill, deleteBill, addPay, deletePay, okButton);
 	
 	
-	//sets the size of scene to be 1000 by 200
-	Scene scene = new Scene(grid, 1000, 200);
-	
-	//sets Scene scene to the stage and displays the stage
-	window.setScene(scene);
-	window.show();
-	
+	info.setStyle("-fx-background-color: white;");
 		
 	}
+        public Parent getView(){
+            return info;
+        }
 	
 }

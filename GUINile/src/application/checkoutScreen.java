@@ -5,6 +5,8 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -15,22 +17,15 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class checkoutScreen extends Application {
-	Stage window;
+public class checkoutScreen {
+	private GridPane grid;
 	
 	
-	public static void main(String[] args){
-		launch(args);
+	public checkoutScreen() {
 		
-	}
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		
-		window = primaryStage;
-		window.setTitle("Checkout Screen");
 		
 		//Size and spacing of the GUI
-		GridPane grid = new GridPane();
+		grid = new GridPane();
 		grid.setPadding(new Insets(10, 10, 10, 10));
 		grid.setVgap(8);
 		grid.setHgap(10);
@@ -123,6 +118,16 @@ public class checkoutScreen extends Application {
 		
 		//The Place Order Button 
 		Button placeOrder = new Button("Place Order");
+                placeOrder.setOnAction(ev-> {
+                                            //hides the login screen once login is successful
+                                            ((Node)ev.getSource()).getScene().getWindow().hide();    
+                                            Parent confirm = new confirmationScreen().getView();
+                                            Scene confirmScene = new Scene(confirm, 300, 300);
+                                            Stage confirmStage = new Stage();
+                                            confirmStage.initOwner(placeOrder.getScene().getWindow());
+                                            confirmStage.setScene(confirmScene);
+                                            confirmStage.show();
+                                        });
 		GridPane.setConstraints(placeOrder, 4, 1);
 		
 		//Labels for the details of the order 
@@ -166,12 +171,12 @@ public class checkoutScreen extends Application {
 				itemDetail, shipDetail, subDetail, taxDetail, totalDetail, itemCost,
 				shipCost, subCost, taxCost, totalCost);
 		
-		//sets the size of the scene and adds the grid to the scene
-		Scene scene = new Scene(grid, 1000, 300);
-		window.setScene(scene);
-		window.show();
 		
+		grid.setStyle("-fx-background-color: white;");
 		
 	}
+        public Parent getView(){
+            return grid;
+        }
 
 }

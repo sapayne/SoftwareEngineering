@@ -1,7 +1,12 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package application;
 
-
 import javafx.application.Application;
+import static javafx.application.Application.launch;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,44 +23,46 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-public class cartScreen {
-	private GridPane window;
-	
-	public cartScreen() {
-                        
-                 //sizing and spacing of the GUI
-                        window = new GridPane();
-                        window.setPadding(new Insets(10, 10, 10, 10));
-                        window.setVgap(8);
-                        window.setHgap(10);
+/**
+ *
+ * @author qmorr
+ */
+public class accountScreen  {
+    private GridPane view;
+    
+    public accountScreen() {
+        
+        view = new GridPane();
+		view.setPadding(new Insets(10, 10, 10, 10));
+		view.setVgap(8);
+		view.setHgap(10);
 		
-                        //Label of the category selection
-                        Button homeButton = new Button("Home");
-                        homeButton.setPrefWidth(80);
-                        homeButton.setOnAction(e-> {
-                            //hides the login screen once login is successful
-                            ((Node)e.getSource()).getScene().getWindow().hide();
-                            Parent homeScreen = new homeScreen().getView();
-                            Stage home = new Stage();
-                            home.initOwner(homeButton.getScene().getWindow());
-                            //display home page
-                            Scene homeScene = new Scene(homeScreen, 1600, 900);
-                            home.setScene(homeScene);
-                            
-                            Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+                //Label of the home button
+                Button homeButton = new Button("Home");
+                homeButton.setPrefWidth(80);
+                homeButton.setOnAction(e-> {
+                    //hides the login screen once login is successful
+                    ((Node)e.getSource()).getScene().getWindow().hide();
+                    Parent homeScreen = new homeScreen().getView();
+                    Stage home = new Stage();
+                    home.initOwner(homeButton.getScene().getWindow());
+                    //display home page
+                    Scene homeScene = new Scene(homeScreen, 1600, 900);
+                    home.setScene(homeScene);
+                    
+                    Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
 
-                            //set Stage boundaries to visible bounds of the main screen
-                            home.setX(primaryScreenBounds.getMinX());
-                            home.setY(primaryScreenBounds.getMinY());
-                            home.setWidth(primaryScreenBounds.getWidth());
-                            home.setHeight(primaryScreenBounds.getHeight());
-                            home.show();
-                        });
-                        GridPane.setConstraints(homeButton, 0, 0);
+                    //set Stage boundaries to visible bounds of the main screen
+                    home.setX(primaryScreenBounds.getMinX());
+                    home.setY(primaryScreenBounds.getMinY());
+                    home.setWidth(primaryScreenBounds.getWidth());
+                    home.setHeight(primaryScreenBounds.getHeight());
+                    home.show();
+                });
+                GridPane.setConstraints(homeButton, 0, 0);
                 
                         //creating the category select drop down box when a category is selected
                         String blank = new String("All");
@@ -79,6 +86,7 @@ public class cartScreen {
                         ChoiceBox<?> categoryBox = new ChoiceBox<>(categories);
                         categoryBox.getSelectionModel().selectFirst();
                         GridPane.setConstraints(categoryBox, 1, 0);
+		
                         //creating the textfield for the search bar
                         TextField searchBar = new TextField();
                         searchBar.setPrefWidth(700);
@@ -129,6 +137,7 @@ public class cartScreen {
                         Stage stage = new Stage();
                         stage.initOwner(yourAcc.getScene().getWindow());
                         stage.setScene(scene);
+                        
                         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
 
                         //set Stage boundaries to visible bounds of the main screen
@@ -155,6 +164,7 @@ public class cartScreen {
                         //gets the size of the scene and put the grid on the scene
                         Scene scene = new Scene(window, 1600, 900);
                         cart.setScene(scene);
+                        
                         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
 
                         //set Stage boundaries to visible bounds of the main screen
@@ -162,107 +172,64 @@ public class cartScreen {
                         cart.setY(primaryScreenBounds.getMinY());
                         cart.setWidth(primaryScreenBounds.getWidth());
                         cart.setHeight(primaryScreenBounds.getHeight());
+                        
                         cart.show();
-                        });
+                            });
                         GridPane.setConstraints(cartButton, 8, 1);
-		
-				//Label for price and Quantity
-				Label priceLabel = new Label("Price");
-				GridPane.setConstraints(priceLabel, 4, 2);
-				
-				Label quantityLabel = new Label("Quantity");
-				GridPane.setConstraints(quantityLabel, 6, 2);
-				
-				//Shows the the products in the cart 
-				Label productInfo1 = new Label("(MacBook Pro 15 in)");
-				GridPane.setConstraints(productInfo1, 0, 3);
-				
-				Label productInfo2 = new Label("Apple Watch Series 3");
-				GridPane.setConstraints(productInfo2, 0, 4);
-				
-				Label productInfo3 = new Label("(MacBook Pro 13 in)");
-				GridPane.setConstraints(productInfo3, 0, 5);
-				
-				//Prices of the products in the cart
-				Label productPrice1 = new Label("$2,295.00");
-				GridPane.setConstraints(productPrice1, 4, 3);
-				
-				Label productPrice2 = new Label("$429.00");
-				GridPane.setConstraints(productPrice2, 4, 4);
-				
-				Label productPrice3 = new Label("$1999.00");
-				GridPane.setConstraints(productPrice3, 4, 5);
-				
-				//Drop down for select quantity
-				ChoiceBox<String> quantitySelect1 = new ChoiceBox<>();
-				quantitySelect1.getItems().add("1");
-				quantitySelect1.getItems().add("2");
-				quantitySelect1.getItems().add("3");
-				quantitySelect1.getItems().add("4");
-				quantitySelect1.getItems().add("5");
-				GridPane.setConstraints(quantitySelect1, 6, 3);
-				
-				ChoiceBox<String> quantitySelect2 = new ChoiceBox<>();
-				quantitySelect2.getItems().add("1");
-				quantitySelect2.getItems().add("2");
-				quantitySelect2.getItems().add("3");
-				quantitySelect2.getItems().add("4");
-				quantitySelect2.getItems().add("5");
-				GridPane.setConstraints(quantitySelect2, 6, 4);
-				
-				ChoiceBox<String> quantitySelect3 = new ChoiceBox<>();
-				quantitySelect3.getItems().add("1");
-				quantitySelect3.getItems().add("2");
-				quantitySelect3.getItems().add("3");
-				quantitySelect3.getItems().add("4");
-				quantitySelect3.getItems().add("5");
-				GridPane.setConstraints(quantitySelect3, 6, 5);
-				
-				//Delete Button for products in the cart
-				Button deleteButton1 = new Button("delete");
-				GridPane.setConstraints(deleteButton1, 7, 3);
-
-				Button deleteButton2 = new Button("delete");
-				GridPane.setConstraints(deleteButton2, 7, 4);
-				
-				Button deleteButton3 = new Button("delete");
-				GridPane.setConstraints(deleteButton3, 7, 5);
-				
-				//Save for Later button for products in cart
-				Button saveButton1 = new Button("save");
-				GridPane.setConstraints(saveButton1, 8, 3);
-
-				Button saveButton2 = new Button("save");
-				GridPane.setConstraints(saveButton2, 8, 4);
-				
-				Button saveButton3 = new Button("save");
-				GridPane.setConstraints(saveButton3, 8, 5);
-				
-				//checkout button that will take user to the checkout screen
-				Button checkoutButton = new Button("Checkout");
-                                checkoutButton.setOnAction(e-> {   
-                                            Parent checkout = new checkoutScreen().getView();
-                                            Scene check = new Scene(checkout, 800, 500);
-                                            Stage checkStage = new Stage();
-                                            checkStage.initOwner(checkoutButton.getScene().getWindow());
-                                            checkStage.setScene(check);
-                                            checkStage.show();
-                                });
-				GridPane.setConstraints(checkoutButton, 8, 6);
-
-
-			//adds all of the buttons, labels, and drop down menus to the grid
-		window.getChildren().addAll(homeButton, categoryBox,searchBar, searchButton, browHist,
+                        
+                        Button recentOrders = new Button("Recent Orders");
+                        recentOrders.setStyle("-fx-font-size: 24px");
+                        recentOrders.setMinWidth(300);
+                        recentOrders.setMinHeight(150);
+                        GridPane.setConstraints(recentOrders, 2, 4);
+                        
+                        Button payOptions = new Button("Payment Options");
+                        payOptions.setStyle("-fx-font-size: 24px");
+                        payOptions.setMinWidth(300);
+                        payOptions.setMinHeight(150);
+                        payOptions.setOnAction(e-> {
+                            Parent info = new infoScreen().getView();
+                            Scene scene = new Scene(info, 1000, 500);
+                            Stage infoStage = new Stage();
+                            infoStage.initOwner(payOptions.getScene().getWindow());
+                            infoStage.setScene(scene);
+                            infoStage.show();
+                        });
+                        GridPane.setConstraints(payOptions, 3, 4);
+                        
+                        Button addresses = new Button("Your Addresses");
+                        addresses.setStyle("-fx-font-size: 24px");
+                        addresses.setMinWidth(300);
+                        addresses.setMinHeight(150);
+                        addresses.setOnAction(e-> {
+                            Parent info = new infoScreen().getView();
+                            Scene scene = new Scene(info, 1000, 500);
+                            Stage infoStage = new Stage();
+                            infoStage.initOwner(addresses.getScene().getWindow());
+                            infoStage.setScene(scene);
+                            infoStage.show();
+                        });
+                        GridPane.setConstraints(addresses, 2, 5);
+                        
+                        Button giftCards = new Button("Gift Cards");
+                        giftCards.setStyle("-fx-font-size: 24px");
+                        giftCards.setMinWidth(300);
+                        giftCards.setMinHeight(150);
+                        GridPane.setConstraints(giftCards, 3, 5);
+        
+                        view.getChildren().addAll(homeButton, categoryBox,searchBar, searchButton, browHist,
 				todayDeal, giftCard, sellButton, helpButton, langSelect, yourAcc,
-				ordersButton, cartButton, priceLabel, quantityLabel, productInfo1, 
-				productInfo2, productInfo3, productPrice1, productPrice2, productPrice3,
-				quantitySelect1, quantitySelect2, quantitySelect3, deleteButton1,
-				deleteButton2, deleteButton3, saveButton1, saveButton2, saveButton3,
-				checkoutButton);  
-                
-                window.setStyle("-fx-background-color: beige;");
-}
-            public Parent getView(){
-                return window;
-            }
+				ordersButton, cartButton, recentOrders, payOptions, addresses, giftCards);
+        view.setStyle("-fx-background-color: beige;");
+        
+    }
+    public Parent getView(){
+        return view;
+    }
+
+    /**
+     * @param args the command line arguments
+     */
+    
+    
 }
