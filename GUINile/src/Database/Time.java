@@ -1,3 +1,5 @@
+//	Author: Samuel Payne
+
 package Database;
 
 import java.text.SimpleDateFormat;
@@ -8,7 +10,7 @@ public class Time {
 	//	converts the epoch time recorded at the time the item is bought and returns the time into human readable 
 	//	time
 	public String epochToHuman(long seconds){
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");	// month/day/year hour:minute:second
 		return sdf.format(new Date(seconds*1000));
 	}
 	

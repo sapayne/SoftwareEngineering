@@ -212,7 +212,7 @@ public class BPlusTree {
 	}
 	
 	// searches for the name in the database then returns the next number of values (range) that match the 
-	// entered value the most 
+	// entered value the most, simplest from of auto-complete
 	public String[] printSimilar(String name, int range) {
 		String[] array;
 		Object[] similarName = search(name);
@@ -222,13 +222,45 @@ public class BPlusTree {
 		if(range < 0) {
 			range *= -1;
 			array = new String[range];
-			for(int i = 0; i < range; i++) {
-				
+			if(range > current.size() - index) {
+				for(int i = current.size()-1; i >= index; i--) {
+					if(((Node)current.getChild(i)).getName().matches(name)) {
+						array[i] = ((Node)current.getChild(i)).getName();
+						range--;
+					} else {
+						return array;
+					}
+				}
+				if(current.getLeftSibling() != null) {
+					current = current.getLeftSibling();
+					printSimilar(((Node)current.getChild(0)).getName(), -range);
+				} else if (current.getRightSibling() != null){
+					current = current.getRightSibling();
+					printSimilar(((Node)current.getChild(0)).getName(), range);
+				} else {
+					return array;
+				}
 			}
 		} else if(range > 1){
 			array = new String[range];
-			for(int i = 0 ; i < range; i++) {
-				
+			if(range > current.size() - index) {
+				for(int i = index; i < current.size(); i++) {
+					if(((Node)current.getChild(i)).getName().matches(name)) {
+						array[i] = ((Node)current.getChild(i)).getName();
+						range--;
+					} else {
+						return array;
+					}
+				}
+				if(current.getRightSibling() != null) {
+					current = current.getRightSibling();
+					printSimilar(((Node)current.getChild(0)).getName(), range);
+				} else if (current.getLeftSibling() != null) {
+					current = current.getLeftSibling();
+					printSimilar(((Node)current.getChild(0)).getName(), -range);
+				} else {
+					return array;
+				}
 			}
 		} else {
 			array = new String[1];
@@ -244,9 +276,14 @@ public class BPlusTree {
 	//searches the tree then determines what category the item belongs too, then prints the other items in that
 	//category that come alphabetically after the item returned
 	public Node[] returnSimilar(String name, int range) {
-		Node[] array = new Node[range]; //determined by how many results can be displayed per page
-		
-		
+		Node[] array = null; //determined by how many results can be displayed per page
+		if(range > 0) {
+			array = new Node[range];
+			
+		} else if (range == 0) {
+			array = new Node[1];
+			
+		}
 		return array;
 	}
 	
@@ -256,7 +293,7 @@ public class BPlusTree {
 		}	
 	}
 	
-	//deletes the item from the database
+	//deletes the item from the Btree, and calls the merge function to see if the tree can be made smaller
 	protected void delete(String name) {
 		Object[] btreenode = search(name);
 		current = (BTreeNode) btreenode[0];
@@ -286,20 +323,23 @@ public class BPlusTree {
 				left.setRightSibling(right.getRightSibling());
 			}
 			BTreeNode parent = left.getParent();
-			parent.removeChild(right);
 			left.setSize(left.size() + right.size());
+			parent.removeChild(right);
 		}
-		
 	}
 	
+	//	returns the total number of nodes in the tree, can be used as a this is how many items we have in our 
+	// 	database.
 	public int size() {
 		return size;
 	}
 	
+	//	used to see if the btreenode being tested is at the lowest level of the tree
 	private boolean isLeaf(BTreeNode current) {
 		return current.getChild(0) instanceof Node;
 	}
 	
+	//	test if the tree is empty, not really ever used outside of initializing the tree
 	private boolean isEmpty() {
         return treeRoot == null;
     }

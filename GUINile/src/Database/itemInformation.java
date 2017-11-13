@@ -1,4 +1,3 @@
-
 package Database;
 
 public class itemInformation {
@@ -8,7 +7,7 @@ public class itemInformation {
 	private int stock, numberSold, popularity;
 
 	public itemInformation(String name, String brand, double price, int stock,
-			String category, int weight, int popularity, String image, 
+			String category, double weight, int popularity, String image, 
 			int numberSold, String description) {
 		super();
 		this.name = name;
