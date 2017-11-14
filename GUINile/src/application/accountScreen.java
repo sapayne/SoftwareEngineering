@@ -208,8 +208,8 @@ public class accountScreen  {
                         payOptions.setMinWidth(300);
                         payOptions.setMinHeight(150);
                         payOptions.setOnAction(e-> {
-                            Parent info = new infoScreen().getView();
-                            Scene scene = new Scene(info, 1000, 500);
+                            Parent infoPay = new infoScreenPay().getView();
+                            Scene scene = new Scene(infoPay, 600, 400);
                             Stage infoStage = new Stage();
                             infoStage.initOwner(payOptions.getScene().getWindow());
                             infoStage.setScene(scene);
@@ -222,8 +222,8 @@ public class accountScreen  {
                         addresses.setMinWidth(300);
                         addresses.setMinHeight(150);
                         addresses.setOnAction(e-> {
-                            Parent info = new infoScreen().getView();
-                            Scene scene = new Scene(info, 1000, 500);
+                            Parent infoAdd = new infoScreenAddress().getView();
+                            Scene scene = new Scene(infoAdd, 600, 400);
                             Stage infoStage = new Stage();
                             infoStage.initOwner(addresses.getScene().getWindow());
                             infoStage.setScene(scene);

@@ -1,5 +1,6 @@
-package softwareengineering;
+package application;
 
+import Database.Product;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.application.Platform;
@@ -42,20 +43,13 @@ import javafx.stage.Stage;
 * @author dzheng
 */
 
-public class infoScreenAddress extends Application{
-	
-	Stage window;
+public class infoScreenAddress{
+	private VBox vBox; 
 	TableView<Product> table;
 	TextField nameInput, numInput, dateInput;
 	
-	public static void main(String [] args) {
-		launch(args);
-	}
-
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		window = primaryStage;
-		window.setTitle("Payment Information");
+	public infoScreenAddress() {
+		
 		
 		TableColumn<Product, String> nameColumn = new TableColumn<>("Street Name");
 		nameColumn.setMinWidth(200);
@@ -96,12 +90,9 @@ public class infoScreenAddress extends Application{
 		table.setItems(getProduct());
 		table.getColumns().addAll(nameColumn, numColumn, dateColumn);
 		
-		VBox vBox = new VBox();
+		vBox = new VBox();
 		vBox.getChildren().addAll(table,hBox);
 		
-		Scene scene = new Scene(vBox);
-		window.setScene(scene);
-		window.show();
 	}
 	
 	public void addButtonClicked() {
@@ -133,7 +124,7 @@ public class infoScreenAddress extends Application{
 
 	public Parent getView() {
 		// TODO Auto-generated method stub
-		return null;
+		return vBox;
 	}
 	
 	
