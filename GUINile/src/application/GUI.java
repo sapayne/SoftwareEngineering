@@ -43,8 +43,8 @@ import javafx.stage.Stage;
  */
 public class GUI extends Application {
     
-    static String user = "q";
-    static String password = "q";
+    static String user = "dqsz@gsu.edu";
+    static String password = "dqsz123";
     static String checkEmail, checkPass;
     
     public static void main(String[] args) {
