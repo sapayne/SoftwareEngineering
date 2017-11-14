@@ -153,12 +153,33 @@ public class BPlusTree {
 		}
 	}
 	
+	/* returns the node that has the exact name as the name being searched for
+	 * 
+	 */
+	public Node searchTree(String name) {
+		current = treeRoot;
+		do {
+			if(isLeaf(current)) {
+				int index = current.binarySearch(name, 0, current.size());
+				node = (Node)current.getChild(index);
+				if(node.getName().equalsIgnoreCase(name)) {
+					return node;
+				}
+				
+			} else {
+				current = (BTreeNode) current.getChild(current.binarySearch(name, 0, current.size()));
+			}
+			
+		} while(true);
+		
+	}
+	
 	/* The search function tests if the current node is a leaf and then uses the binary search function of the 
 	 * bTree Node class to determine the location of the index where the node is found/needs to be inserted, or 
 	 * gives the index where the next bTree Node that's closest to the value being searched for. Last returns 
 	 * the bTreeNode and index of the where either the value exists or needs to be placed.
 	 */
-	public Object[] search(String name) {
+	private Object[] search(String name) {
 		Object[] array = new Object[2];
 		current = treeRoot;
 		do {	

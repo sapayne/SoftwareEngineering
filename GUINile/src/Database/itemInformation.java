@@ -3,11 +3,11 @@ package Database;
 public class itemInformation {
 	
 	private String name, brand, category, description, image;
-	private double price, weight;
-	private int stock, numberSold, popularity;
+	private double price, weight, popularity;
+	private int stock, numberSold;
 
 	public itemInformation(String name, String brand, double price, int stock,
-			String category, double weight, int popularity, String image, 
+			String category, double weight, double popularity, String image, 
 			int numberSold, String description) {
 		super();
 		this.name = name;
@@ -94,7 +94,7 @@ public class itemInformation {
 		this.numberSold = numberSold;
 	}
 	
-	public int getPopularity() {
+	public double getPopularity() {
 		return popularity;
 	}
 
