@@ -1,4 +1,4 @@
-package softwareengineering;
+package Database;
 
 public class Product {
 	
