@@ -1,98 +1,79 @@
-package softwareEngineering;
+package Database;
 
 public class Order {
 	
-	private String name, brand, description, image;
-	private double price, weight;
+	private String customerName, itemName, brand,  image, index;
+	private double price;
 	private int quantity;
-	Time time = new Time();
+	private long time;
 	
-	public Order(String name, String brand,
-			String description, String image, double price, double weight,
-			int quantity, Time time) {
-		super();
-		this.name = name;
+	//no setters needed as you will never change the contents of an order after it's been placed
+	public Order(String customerName, String itemName, String brand,  String image, double price, int quantity, String index, long time) {
+		this.customerName = customerName;
+		this.itemName = itemName;
 		this.brand = brand;
-		this.description = description;
 		this.image = image;
+		this.index = index;
 		this.price = price;
-		this.weight = weight;
 		this.quantity = quantity;
 		this.time = time;
 	}
-
-	public Order() {
-		name = "";
-		brand = "";
-		description = "";
-		image = "";
-		price = 0;
-		weight = 0;
-		quantity = 0;
-		time = null;
+	
+	public String getCustomerName() {
+		return customerName;
 	}
-
-	public String getName() {
-		return name;
+	/*
+	public void setCustomerName(String customerName){
+		this.customerName = customerName;
 	}
+	 */
 
-	public void setName(String name) {
-		this.name = name;
+	public String getItemName() {
+		return itemName;
 	}
-
+	/*
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+	*/
 	public String getBrand() {
 		return brand;
 	}
-
+	/*
 	public void setBrand(String brand) {
 		this.brand = brand;
 	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
+	*/
 	public String getImage() {
 		return image;
 	}
-
+	/*
 	public void setImage(String image) {
 		this.image = image;
 	}
-
+	*/
+	public String getIndex() {
+		return index;
+	}
+	
 	public double getPrice() {
 		return price;
 	}
-
+	/*
 	public void setPrice(double price) {
 		this.price = price;
 	}
-
-	public double getWeight() {
-		return weight;
-	}
-
-	public void setWeight(double weight) {
-		this.weight = weight;
-	}
-
+	*/
 	public int getQuantity() {
 		return quantity;
 	}
-
+	/*
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-
-	public Time getTime() {
+	*/
+	public long getTime() {
 		return time;
 	}
-
-	public void setTime(Time time) {
-		this.time = time;
-	}
+	//no set time needed as you are never changing or updating, once the customer has bought an item
 }

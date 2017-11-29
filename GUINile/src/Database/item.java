@@ -53,14 +53,16 @@ public class item {
 		double price = Double.parseDouble(metadata[2]);
 		int stock = Integer.parseInt(metadata[3]);
 		String category = metadata[4];
-		int weight = Integer.parseInt(metadata[5]);
-		int popularity = Integer.parseInt(metadata[6]);
+		double weight = Double.parseDouble(metadata[5]);
+		double popularity = Double.parseDouble(metadata[6]);
 		String image = metadata[7];
 		int numberSold = Integer.parseInt(metadata[8]);
 		String description = metadata[9];
+		int reviewed = Integer.parseInt(metadata[10]);
+		
 		
 	    return new itemInformation(name, brand, price, 
 				stock, category, weight, popularity, image, 
-				numberSold, description);
+				numberSold, description,reviewed);
 	}
 }

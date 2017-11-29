@@ -4,11 +4,11 @@ public class itemInformation {
 	
 	private String name, brand, category, description, image;
 	private double price, weight, popularity;
-	private int stock, numberSold;
+	private int stock, numberSold, numReviewed;
 
 	public itemInformation(String name, String brand, double price, int stock,
 			String category, double weight, double popularity, String image, 
-			int numberSold, String description) {
+			int numberSold, String description, int numReviewed) {
 		super();
 		this.name = name;
 		this.brand = brand;
@@ -20,6 +20,7 @@ public class itemInformation {
 		this.stock = stock;
 		this.numberSold = numberSold;
 		this.popularity = popularity;
+		this.numReviewed = numReviewed;
 	}
 
 	public String getName() {
@@ -98,8 +99,16 @@ public class itemInformation {
 		return popularity;
 	}
 
-	public void setPopularity(int popularity) {
+	public void setPopularity(double popularity) {
 		this.popularity = popularity;
+	}
+	
+	public int getNumReviewed() {
+		return numReviewed;
+	}
+	
+	public void setNumReviewed(int reviewed) {
+		numReviewed = reviewed;
 	}
 
 	public String toString() {

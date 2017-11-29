@@ -30,14 +30,15 @@ public class BTreeNode {
 	}
 	
 	//adds the pointer to the node containing the object information and the name of the object in the next index
+	//TODO
 	protected void addChild(Node node) {
 		int index;
 		Node current = node;
 		index = binarySearch(current.getName(), 0, size());
 		childShift(index + 1, size());
-		contentShift(index, size() - 1);
+		contentShift(index + 1, size() - 1);
 		contents[index] = current.getName();
-		children[index + 1] = current;
+		children[index] = current;
 		size++;
 	}
 	
@@ -71,11 +72,11 @@ public class BTreeNode {
 					// and children[size/2 + 1]
 				}
 				parent.setContents(contents[0], parentIndex);
-				parent.setChild(children[1], parentIndex);
+				parent.setChild(children[1], parentIndex); //TODO
 			}
 			childShift(size, index + 1);
 			contentShift(size - 1, index);
-		} else {	//part of the if check that might not be needed
+		} else {	//part of the if check that might not be needed TODO
 			childShift(size, index + 1);
 			contentShift(size - 1, index);
 		}
@@ -143,7 +144,7 @@ public class BTreeNode {
 	//only used if the length is a small enough number that the binarySearch function is not relevant
 	protected int search(String name) {
 		for(int i = 0; i < size(); i++) {
-			if(name.compareToIgnoreCase(contents[i]) < 0) {
+			if(name.compareTo(contents[i]) < 0) {
 				return i;
 			} 
 		}
@@ -164,10 +165,10 @@ public class BTreeNode {
 			 * the current value (order for less than or greater than doesn't matter as it has the same outcome).
 			 * In the long run this will save running time and lower the number of computations made.
 			 */
-			if (name.compareToIgnoreCase(getContents((endingPointer-startingPointer)/2 + startingPointer)) < 0){
+			if (name.compareTo(getContents((endingPointer-startingPointer)/2 + startingPointer)) < 0){
 				// recursion used as a loop to pinpoint the value being looked for
 				return binarySearch(name, startingPointer, (endingPointer-startingPointer)/2 + startingPointer);
-			} else if(name.compareToIgnoreCase(getContents((endingPointer-startingPointer)/2 + startingPointer)) > 0) {
+			} else if(name.compareTo(getContents((endingPointer-startingPointer)/2 + startingPointer)) > 0) {
 				// recursion used as a loop to pinpoint the value being looked for
 				return binarySearch(name, (endingPointer-startingPointer)/2 + startingPointer, endingPointer);
 			} else {
@@ -175,7 +176,7 @@ public class BTreeNode {
 			}
 		} else {
 			// base case so the order doesn't matter and there doesn't need to be 3 cases as it's just one value
-			if(name.compareToIgnoreCase(getContents((endingPointer-startingPointer)/2 + startingPointer)) < 0) {
+			if(name.compareTo(getContents((endingPointer-startingPointer)/2 + startingPointer)) < 0) {
 				return (endingPointer-startingPointer)/2 + startingPointer - 1;
 			} else {
 				return (endingPointer-startingPointer)/2 + startingPointer;

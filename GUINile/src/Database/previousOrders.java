@@ -1,26 +1,35 @@
-package softwareEngineering;
+package Database;
 
-import java.util.*;
+import java.util.ArrayList;
 
 
 public class previousOrders {
 	
-	    ArrayList<Object> previousOrder = new ArrayList<Object>();
-	    Order order = new Order();
+	    ArrayList<Order> previousOrder = new ArrayList<Order>();
 	    
 	    public void addOrder(Order order) {
 			previousOrder.add(order);
 		}
 					
-		public Object getLastItem() {
-			for(int i = 10; i <= 10; i++) {
-				if(previousOrder.isEmpty()){
-					System.out.println("No previous orders");
+		public Order[] getPreviousOrders(int index, int range) {
+			Order[] orders = null;
+			if(previousOrder.isEmpty()) {
+				return orders;
+			} 
+			//reverses the order at which the previousOrders are added to the orders array, so the last
+			//order is the first order in the orders array, same idea as a stack
+			if (index + range <= previousOrder.size()){
+				orders = new Order[range];
+				for(int i = range - 1; i >= 0; i--) {
+					orders[i] = previousOrder.get(previousOrder.size() - i - 1);
 				}
-				else {
-					return previousOrder.get(previousOrder.size() - 1);		
+			} else {
+				int remainingOrders = previousOrder.size() - index;
+				orders = new Order[remainingOrders];
+				for(int i = remainingOrders - 1; i >= 0; i--) {
+					orders[i] = previousOrder.get(remainingOrders - i - 1);
 				}
 			}
-			return null;
+			return orders;
 		}
 }

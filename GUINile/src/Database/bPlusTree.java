@@ -40,13 +40,21 @@ public class BPlusTree {
 	 * than bTree node. Last it calls leafUpdate function which connects all the leaf bTree nodes together.
 	 */
 	private void split(BTreeNode nodeToSplit) {
+		int isNode = 1;
+		/* is used to determine if a bTreeNode containing bTreeNodes or a bTreeNode containing Nodes is being 
+		 * split, changes the index location the contents to match the child index location (used later on to
+		 * retrieve data correctly)
+		 */
+		if(isLeaf(nodeToSplit)) {
+			isNode = 0;
+		}
 		BTreeNode greaterThanEqual = new BTreeNode(length);
 		/* the for loop is duplicated for the purpose of saving runtime computations, instead of saving space
 		 * by the if else being inside the for loop
 		 */
 		if(isLengthOdd()) {	//checks if the bTreeNode has an odd number of contents (string array used in bTreeNode as storage)
 			for(int i = 0; i < length/2; i++) {
-				greaterThanEqual.setContents(nodeToSplit.getContents(length-1-i), length/2-i);
+				greaterThanEqual.setContents(nodeToSplit.getContents(length-isNode-i), length/2-i);
 				nodeToSplit.setContents(null, length-1-i);
 				greaterThanEqual.setChild(nodeToSplit.getChild(length-i), length/2-i);
 				nodeToSplit.setChild(null, length-i);
@@ -57,7 +65,7 @@ public class BPlusTree {
 			greaterThanEqual.setSize(length/2+1);
 		} else {
 			for(int i = 0; i < length/2; i++) {
-				greaterThanEqual.setContents(nodeToSplit.getContents(length-1-i), length/2-1-i);
+				greaterThanEqual.setContents(nodeToSplit.getContents(length-isNode-i), length/2-1-i);
 				nodeToSplit.setContents(null, length-1-i);
 				greaterThanEqual.setChild(nodeToSplit.getChild(length-i), length/2-i);
 				nodeToSplit.setChild(null, length-i);
@@ -153,8 +161,8 @@ public class BPlusTree {
 		}
 	}
 	
-	/* returns the node that has the exact name as the name being searched for
-	 * 
+	/* returns the node that has the exact name as the name being searched for or it returns null if the 
+	 * node doesn't exist
 	 */
 	public Node searchTree(String name) {
 		current = treeRoot;
@@ -162,16 +170,17 @@ public class BPlusTree {
 			if(isLeaf(current)) {
 				int index = current.binarySearch(name, 0, current.size());
 				node = (Node)current.getChild(index);
-				if(node.getName().equalsIgnoreCase(name)) {
+				if(node.getName().compareTo(name) == 0) {
 					return node;
+				} else {
+					return null;
 				}
 				
 			} else {
 				current = (BTreeNode) current.getChild(current.binarySearch(name, 0, current.size()));
 			}
 			
-		} while(true);
-		
+		} while(true);	
 	}
 	
 	/* The search function tests if the current node is a leaf and then uses the binary search function of the 
@@ -233,9 +242,9 @@ public class BPlusTree {
 	}
 	
 	// searches for the name in the database then returns the next number of values (range) that match the 
-	// entered value the most, simplest from of auto-complete
+	// entered value the most, simplest from of auto-complete, change to return an array of nodes
 	public String[] printSimilar(String name, int range) {
-		String[] array;
+		String[] array = null;
 		Object[] similarName = search(name);
 		current = ((BTreeNode)similarName[0]);
 		int index = (int)similarName[1];
@@ -287,8 +296,6 @@ public class BPlusTree {
 			array = new String[1];
 			if(current.getContents(index).equalsIgnoreCase(name)) {
 				array[0] = name;
-			} else {
-				array[0] = "no results";
 			}
 		}
 		return array;
@@ -298,12 +305,58 @@ public class BPlusTree {
 	//category that come alphabetically after the item returned
 	public Node[] returnSimilar(String name, int range) {
 		Node[] array = null; //determined by how many results can be displayed per page
-		if(range > 0) {
+		Object[] similarName = search(name);
+		current = (BTreeNode) similarName[0];
+		int index = (int)similarName[1];
+
+		if(range < 0) {
+			range *= -1;
 			array = new Node[range];
-			
-		} else if (range == 0) {
+			if(range > current.size() - index) {
+				for(int i = current.size()-1; i >= index; i--) {
+					if(((Node)current.getChild(i)).getName().matches(name)) {
+						array[i] = (Node)current.getChild(i);
+						range--;
+					} else {
+						return array;
+					}
+				}
+				if(current.getLeftSibling() != null) {
+					current = current.getLeftSibling();
+					returnSimilar(((Node)current.getChild(0)).getName(), -range);
+				} else if (current.getRightSibling() != null){
+					current = current.getRightSibling();
+					returnSimilar(((Node)current.getChild(0)).getName(), range);
+				} else {
+					return array;
+				}
+			}
+		} else if(range > 1){
+			array = new Node[range];
+			if(range > current.size() - index) {
+				for(int i = index; i < current.size(); i++) {
+					if(((Node)current.getChild(i)).getName().matches(name)) {
+						array[i] = (Node)current.getChild(i);
+						range--;
+					} else {
+						return array;
+					}
+				}
+				if(current.getRightSibling() != null) {
+					current = current.getRightSibling();
+					returnSimilar(((Node)current.getChild(0)).getName(), range);
+				} else if (current.getLeftSibling() != null) {
+					current = current.getLeftSibling();
+					returnSimilar(((Node)current.getChild(0)).getName(), -range);
+				} else {
+					return array;
+				}
+			}
+		} else {
 			array = new Node[1];
-			
+			if(current.getContents(index).equalsIgnoreCase(name)) {
+				array[0] = (Node) current.getChild(index);
+			} 
 		}
 		return array;
 	}
