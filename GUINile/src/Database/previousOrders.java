@@ -25,9 +25,11 @@ public class previousOrders {
 				}
 			} else {
 				int remainingOrders = previousOrder.size() - index;
-				orders = new Order[remainingOrders];
-				for(int i = remainingOrders - 1; i >= 0; i--) {
-					orders[i] = previousOrder.get(remainingOrders - i - 1);
+				if(remainingOrders != 0) {
+					orders = new Order[remainingOrders];
+					for(int i = remainingOrders - 1; i >= 0; i--) {
+						orders[i] = previousOrder.get(remainingOrders - i - 1);
+					}
 				}
 			}
 			return orders;

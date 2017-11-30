@@ -97,8 +97,7 @@ public class BPlusTree {
 		}
 	}
 	
-	//	reevaluate how insort for nodes works
-	//	inserts the node at the correct index
+	//	inserts the node at the correct index of the correct bTreeNode
 	private void insort(Node node) {
 		Object[] indexToInsert = search(node.getName());
 		current = (BTreeNode)indexToInsert[0];
@@ -132,7 +131,7 @@ public class BPlusTree {
 			current = treeRoot;
 			node.setName(name);
 			node.setIndex(index);
-			insort(node);
+			current.addChild(node);
 			size++;
 		}else {
 			//call search to see if it exists, if not add it to the bPlusTree
@@ -374,7 +373,8 @@ public class BPlusTree {
 		int index = (int)btreenode[1];
 		Node nodeToDelete = ((Node)current.getChild(index));
 		if(nodeToDelete.getName().equalsIgnoreCase(name)) {
-			current.removeChild(nodeToDelete);
+			current.removeChild(index);
+			//current.removeChild(nodeToDelete);
 			if((current.getLeftSibling().size() + current.size()) < length) {
 				merge(current.getLeftSibling(),current);
 			} else if((current.size() + current.getRightSibling().size()) < length) {

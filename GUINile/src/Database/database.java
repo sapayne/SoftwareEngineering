@@ -10,7 +10,12 @@ public class database implements DatabaseInterface{
 	private Node currentNode;
 	private int size, itemAdjustmentFactor, userAdjustmentFactor, passwordAdjustmentFactor, itemAdjustmentIndex, userAdjustmentIndex, passwordAdjustmentIndex;
 	private String category; //currently not used
-	private user currentUser;
+	/* saves which user is currently logged in, does this because we don't want to return the user object to the
+	 * UI as that would put security at risk, so instead the information is copied into a 2d array and then 
+	 * passed to the user (the person currently using the application.
+	 */
+	private user currentUser; 
+	
 	
 	ArrayList<itemInformation> itemDatabase = new ArrayList<itemInformation>();
 	ArrayList<user> userDatabase = new ArrayList<user>();
@@ -30,6 +35,7 @@ public class database implements DatabaseInterface{
 		return item;	
 	}
 	
+	//returns the names of the items that closely match the name of the item entered
 	public String[] searchBar(String name, int range){
 		Node[] nodeArray = itemTree.returnSimilar(name, range);
 		String[] item = new String[range];
@@ -67,16 +73,28 @@ public class database implements DatabaseInterface{
 				case "bill":
 					return getBilling();
 				case "card":
-					return getCard();
-				case "order":
-					return getPreviousOrders();
+					return getCards();
 			}
 		}
 		return null;
 	}
 	
-	//TODO
+	public String[][] getUserOrders(int index, int range) {
+		return getOrders(index,range);
+	}
+	
+	//TODO finish all the get info functions 
 	private String[] getUserNames() {
+		int i = 0;
+		String[] usernames;
+		while(currentUser.getName(i) != null) {
+			i++;
+		}
+		i++;
+		usernames = new String[i];
+		for(int j = 0; j < i; j++) {
+			usernames[j] = currentUser.getName(j);
+		}
 		return null;
 	}
 	
@@ -88,11 +106,14 @@ public class database implements DatabaseInterface{
 		return null;
 	}
 
-	private String[] getCard() {
+	private String[] getCards() {
 		return null;
 	}
 	
-	private String[] getPreviousOrders() {
+	private String[][] getOrders(int index, int range) {
+		if(currentUser != null && (index > -1 || range > 0)) {
+			return currentUser.getPreviousOrder(index, range);
+		}
 		return null;
 	}
 

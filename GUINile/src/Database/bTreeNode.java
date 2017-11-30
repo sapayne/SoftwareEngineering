@@ -30,13 +30,12 @@ public class BTreeNode {
 	}
 	
 	//adds the pointer to the node containing the object information and the name of the object in the next index
-	//TODO
 	protected void addChild(Node node) {
 		int index;
 		Node current = node;
 		index = binarySearch(current.getName(), 0, size());
 		childShift(index + 1, size());
-		contentShift(index + 1, size() - 1);
+		contentShift(index + 1, size());
 		contents[index] = current.getName();
 		children[index] = current;
 		size++;
@@ -55,6 +54,20 @@ public class BTreeNode {
 		parent.setContents(name, index);
 	}
 	
+	protected void removeChild(int index) {
+		String name = contents[0];
+		childShift(size, index);
+		contentShift(size, index);
+		if(getParent() != null) {
+			BTreeNode parent = getParent();
+			int parentIndex = parent.binarySearch(name, 0, parent.size());
+			parent.setContents(contents[0], parentIndex);
+		} 
+		size--;
+		contents[size] = null;
+		children[size] = null;
+	}
+	/*
 	protected void removeChild(Node node) {
 		int index, parentIndex;
 		Node current = node;
@@ -62,29 +75,30 @@ public class BTreeNode {
 		index = binarySearch(current.getName(), 0, size());
 		/*	if the index returned is 0, then we will have to update the parent node's content value and 
 		 * 	the child value
-		 */
+		 *
 		if(index == 0) { //might not need this check, if the children are stored in the same array index as contents
 			if(getParent() != null) {
 				BTreeNode parent = getParent();
 				parentIndex = parent.binarySearch(name, 0, parent.size());
-				if(parentIndex == 0) {
+				if(parentIndex == 0) { 
+					parent.setContents(contents[0], 0);
+					parent.setChild(current, 1); 
+					contentShift(0, size());
+					childShift(1, size());
 					// remove contents[index] and children[index + 1] and replace them with contents[size/2]
 					// and children[size/2 + 1]
 				}
 				parent.setContents(contents[0], parentIndex);
-				parent.setChild(children[1], parentIndex); //TODO
+				parent.setChild(children[0], parentIndex + 1); 
 			}
-			childShift(size, index + 1);
-			contentShift(size - 1, index);
-		} else {	//part of the if check that might not be needed TODO
-			childShift(size, index + 1);
-			contentShift(size - 1, index);
-		}
+		}	
+		childShift(size, index);
+		contentShift(size - 1, index);
 		contents[size - 1] = null;
 		children[size] = null;
 		size--;
 	}
-	
+	*/
 	protected void removeChild(BTreeNode treeNode) {
 		int index = binarySearch(treeNode.contents[0], 0, size);
 		/*	shifts contents and children pointers, ultimately writing over the reference in contents[index] and 
