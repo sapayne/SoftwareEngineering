@@ -8,6 +8,7 @@ public class database implements DatabaseInterface{
 	private BPlusTree itemTree, userTree, passwordTree;
 	private itemInformation item, currentIndexItem;
 	private Node currentNode;
+	private Order currentOrder;
 	private int size, itemAdjustmentFactor, userAdjustmentFactor, passwordAdjustmentFactor, itemAdjustmentIndex, userAdjustmentIndex, passwordAdjustmentIndex;
 	private String category; //currently not used
 	/* saves which user is currently logged in, does this because we don't want to return the user object to the
@@ -48,8 +49,7 @@ public class database implements DatabaseInterface{
 	
 	// retrieves the item info and returns a copy of it as a string array
 	private String[] itemInfo(String index) {
-		int itemIndex = Integer.parseInt(index.substring(3, index.length()));
-		itemInformation itemInfo = itemDatabase.get(itemIndex);
+		itemInformation itemInfo = getItem(index);
 		String[] item = new String[9];
 		item[0] = itemInfo.getName();
 		item[1] = itemInfo.getBrand();
@@ -63,11 +63,113 @@ public class database implements DatabaseInterface{
 		return item;
 	}
 	
+	//TODO make it so the user is logged in to add data (name, shipping, billing, and credit card info)
+	
+	//returns false if the user was unable to add user information or the correct info type was passed
+	public boolean addInfo(String infoType, String info) {
+		if(currentUser != null) {
+			switch(infoType) {
+			case "name":
+				return addName(info);
+				
+			case "ship":
+				return addShipping(info);
+				
+			case "bill":
+				return addBilling(info);
+				
+			case "card":
+				return addCard(info);
+				
+			}
+		}
+		return false;
+	}
+	
+	//TODO
+	public boolean addUserOrder(String customerName, String itemName, String brand, String image, double price, int quantity) {
+		if(currentUser != null && currentUser.hasName(customerName)) {
+			currentNode = itemTree.searchTree(itemName);
+			String index = currentNode.getIndex();
+			currentUser.addOrder(customerName, currentIndexItem, quantity, index);
+			//return addOrder(customerName);
+		}
+		return false;
+	}
+	
+	//returns false if the name already exists or no more names can be added
+	private boolean addName(String name) {
+		return currentUser.addName(name);
+	}
+	
+	//returns false if the shipping address already exists or no more addresses can be added
+	private boolean addShipping(String shipping) {
+		return currentUser.addShipping(shipping);
+	}
+	
+	//returns false if the billing address already exists or no more addresses can be added
+	private boolean addBilling(String billing) {
+		return currentUser.addBilling(billing);
+	}
+	
+	//returns false if the card already exists or no more cards can be added
+	private boolean addCard(String card) {
+		return currentUser.addCreditCard(card);
+	}
+	
+	private boolean addOrder(String customerName, itemInformation item, int quantity, String index) {
+		if(quantity <= getItem(index).getStock()) {
+			
+		}
+		return false;
+	}
+	
+	//returns false if the user is unable to remove user data
+	public boolean removeUserInfo(String infoType, int index) {
+		if(currentUser != null) {
+			switch(infoType) {
+			case "name":
+				return removeName(index);
+				
+			case "ship":
+				return removeShipping(index);
+				
+			case "bill":
+				return removeBilling(index);
+				
+			case "card":
+				return removeCard(index);
+			}
+		}
+		return false;
+	}
+	
+	//returns false if the name at the index wasn't unable to be removed, must have one name present at all time
+	private boolean removeName(int index) {
+		return currentUser.removeName(index);
+	}
+	
+	//returns false if the shipping address at the index couldn't be removed, either because the wrong index was passed or no more addresses could be removed
+	private boolean removeShipping(int index) {
+		return currentUser.removeShipping(index);
+	}
+	
+	//returns false if the billing address at the index couldn't be removed, either because the wrong index was passed or no more addresses could be removed
+	private boolean removeBilling(int index) {
+		return currentUser.removeBilling(index);
+	}
+	
+	//returns false if the card at the index couldn't be removed, either because the worng index was passed or no more cards could be removed
+	private boolean removeCard(int index) {
+		return currentUser.removeCreditCard(index);
+	}
+	
+	//returns the users information based of the string passed, returns false if one of the four strings wasn't used
 	public String[] getUserInfo(String infoType) {
 		if(currentUser != null) {
 			switch (infoType) {
 				case "name":
-					return getUserNames();
+					return getNames();
 				case "ship":
 					return getShipping();
 				case "bill":
@@ -79,42 +181,55 @@ public class database implements DatabaseInterface{
 		return null;
 	}
 	
+	/* returns the users previous orders if the user is logged in and the index and range are not illegal numbers
+	 * returns null if one of the conditions fail or the user has no previous orders
+	 */
 	public String[][] getUserOrders(int index, int range) {
-		return getOrders(index,range);
+		if(currentUser != null && (index > -1 || range > 0)) {
+			return getOrders(index,range);
+		}
+		return null;
 	}
 	
-	//TODO finish all the get info functions 
-	private String[] getUserNames() {
-		int i = 0;
-		String[] usernames;
-		while(currentUser.getName(i) != null) {
-			i++;
-		}
-		i++;
-		usernames = new String[i];
-		for(int j = 0; j < i; j++) {
-			usernames[j] = currentUser.getName(j);
+	//returns all the names the user has entered
+	private String[] getNames() {
+		int size = currentUser.getNameSize();
+		String[] usernames = new String[size];
+		for(int i = 0; i < size; i++) {
+			usernames[i] = currentUser.getName(i);
 		}
 		return null;
 	}
 	
 	private String[] getShipping() {
+		int size = currentUser.getShippingSize();
+		String[] shipping = new String[size];
+		for(int i = 0; i < size; i++) {
+			shipping[i] = currentUser.getShipping(i);
+		}
 		return null;
 	}
 	
 	private String[] getBilling() {
+		int size = currentUser.getBillingSize();
+		String[] billing = new String[size];
+		for(int i = 0; i < size; i++) {
+			billing[i] = currentUser.getBilling(i);
+		}
 		return null;
 	}
 
 	private String[] getCards() {
+		int size = currentUser.getCreditCardSize();
+		String[] cards = new String[size];
+		for(int i = 0; i < size; i++) {
+			cards[i] = currentUser.getCreditCard(i);
+		}
 		return null;
 	}
 	
 	private String[][] getOrders(int index, int range) {
-		if(currentUser != null && (index > -1 || range > 0)) {
-			return currentUser.getPreviousOrder(index, range);
-		}
-		return null;
+		return currentUser.getPreviousOrder(index, range);
 	}
 
 	//since it returns all the user info, we don't want to give whomever the ability to access the data
@@ -143,6 +258,22 @@ public class database implements DatabaseInterface{
 		return -1;
 	}
 	
+	//TODO also the ability to delete the user's account, and remove account information one index at a time
+	
+	/* user has to be logged in, then changes password, if password doesn't exist (search function) then make a
+	 * new password, before setting the user's password to the new password; go to the old password and decease 
+	 * it's quantity and if it's quantity hits 0 remove the password from the password database then update the 
+	 * password indices for all other users, last add the new password, if unique, to the password database. if 
+	 * the password is not unique then just set the user password index to the index where it exists in the 
+	 * password database.
+	 */
+	public boolean changePassword(String password) {
+		if(currentUser != null) { //means the user is logged in
+			
+		}
+		return false;
+	}
+	
 	// returns true if the username uses the password enter
 	private boolean matches(String password, user User) {
 		Password passwordToTest = passwordDatabase.get(User.getPassword());
@@ -159,11 +290,22 @@ public class database implements DatabaseInterface{
 		return false;
 	}
 	
+	//checks if there is a user logged in to begin with if so then it sets currentUser to null as to break access to the currentUser info
+	//returns false if the user is already logged out
+	public boolean logout() {
+		if(currentUser != null) {
+			currentUser = null;
+			return true;
+		}
+		return false;
+	}
+	
 	// searches similar items within a category and returns them to be used as a way to suggest common items
 	// based on a users previous searches
 	public itemInformation[] searchCategory(String name, int range) {
 		return null;
 	}
+	// TODO make it so the user has to add a name after making their account
 	
 	// adds a new user to the user database
 	public boolean add(String username, String password) {
@@ -230,7 +372,7 @@ public class database implements DatabaseInterface{
 		}
 	}
 	
-	// TODO
+	// TODO not finished
 	// return value is based on if the user could buy the amount of product they wanted
 	public boolean subtract(String index, int amountToSubtract) {
 		// later plan to change this to a switch statement as there will be multiple categories for the item 
@@ -285,7 +427,7 @@ public class database implements DatabaseInterface{
 		}
 	}
 	*/
-	protected itemInformation getItem(String index) {
+	private itemInformation getItem(String index) {
 		int itemIndex = Integer.parseInt(index.substring(3, index.length()));
 		return itemDatabase.get(itemIndex);
 	}

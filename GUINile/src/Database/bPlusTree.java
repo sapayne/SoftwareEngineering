@@ -113,6 +113,7 @@ public class BPlusTree {
 		size++;
 	}
 	
+	/* no longer used as the merge function takes care of the insertion of the BTreeNode's into the correct indices
 	//	inserts the BTreeNode at the correct index
 	private void insort(BTreeNode bTreeNode) {
 		Object[] indexToInsert = search(bTreeNode.getContents(0));
@@ -124,7 +125,7 @@ public class BPlusTree {
 		}
 		current.addChild(bTreeNode);
 	}
-	
+	*/
 	protected void add(String name, String index) {
 		if(isEmpty()) {
 			treeRoot = new BTreeNode(length);
@@ -360,12 +361,13 @@ public class BPlusTree {
 		return array;
 	}
 	
+	/* no longer use as the split function takes care of the resetting of the root node
 	private void rootUpdate() {
 		while(treeRoot.getParent() != null) {
 			treeRoot = treeRoot.getParent();
 		}	
 	}
-	
+	*/
 	//deletes the item from the Btree, and calls the merge function to see if the tree can be made smaller
 	protected void delete(String name) {
 		Object[] btreenode = search(name);

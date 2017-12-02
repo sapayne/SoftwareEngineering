@@ -7,10 +7,13 @@ public class previousOrders {
 	
 	    ArrayList<Order> previousOrder = new ArrayList<Order>();
 	    
-	    public void addOrder(Order order) {
+	    //adds an order to the previous orders database
+	    public boolean addOrder(Order order) {
 			previousOrder.add(order);
+			return true;
 		}
-					
+		
+	    //returns the range of previous orders if the index and range doesn't put the previous orders array out of bounds
 		public Order[] getPreviousOrders(int index, int range) {
 			Order[] orders = null;
 			if(previousOrder.isEmpty()) {

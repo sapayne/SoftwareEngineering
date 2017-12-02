@@ -54,6 +54,7 @@ public class BTreeNode {
 		parent.setContents(name, index);
 	}
 	
+	//removes the child node from the index then moves the remaining nodes into the correct spot and updates the size
 	protected void removeChild(int index) {
 		String name = contents[0];
 		childShift(size, index);

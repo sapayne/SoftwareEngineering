@@ -54,13 +54,15 @@ public class user {
 	
 	//returns true if the name at the index specified was removed
 	protected boolean removeName(int index) {
-		if(index != -1 && index < nameSize) {
-			for(int i = index; i < nameSize - 1; i++) {
-				userInformation[0][i] = userInformation[0][i + 1];
+		if(nameSize > 1) { //means that the user must have at least one name present at all times
+			if(index != -1 && index < nameSize) {
+				for(int i = index; i < nameSize - 1; i++) {
+					userInformation[0][i] = userInformation[0][i + 1];
+				}
+				nameSize--;
+				userInformation[0][nameSize] = null;
+				return true;
 			}
-			nameSize--;
-			userInformation[0][nameSize] = null;
-			return true;
 		}
 		return false;
 	}
@@ -77,8 +79,16 @@ public class user {
 	}
 	
 	//used to determine where to add the next name in the array
-	private int getNameSize(){
+	protected int getNameSize(){
 		return nameSize;
+	}
+	
+
+	protected boolean hasName(String customerName) {
+		if(findName(customerName) != -1) {
+			return true;
+		}
+		return false;
 	}
 	
 	//returns the name located at the index specified, else returns a null string
@@ -101,7 +111,7 @@ public class user {
 	}
 	
 	//used to determine where to add the next shipping address in the array
-	private int getShippingSize(){
+	protected int getShippingSize(){
 		return shippingSize;
 	}
 	
@@ -149,7 +159,7 @@ public class user {
 	}
 	
 	//used to determine where to add the next billing address in the array
-	private int getBillingSize(){
+	protected int getBillingSize(){
 		return billingSize;
 	}
 	
@@ -186,10 +196,10 @@ public class user {
 	}
 	
 	//searches to see if the credit card already exists then if it doesn't; it adds the card to the credit card array
-	protected boolean addcreditCard (String creditCard) {
+	protected boolean addCreditCard (String creditCard) {
 		int index = findCreditCard(creditCard);
 		if(creditCardSize < 5 && index == -1) {
-			userInformation[3][getcreditCardSize()] = creditCard;
+			userInformation[3][getCreditCardSize()] = creditCard;
 			creditCardSize++;
 			return true;
 		}
@@ -197,12 +207,12 @@ public class user {
 	}
 	
 	//used to determine where to add the next credit card in the array
-	private int getcreditCardSize(){
+	protected int getCreditCardSize(){
 		return creditCardSize;
 	}
 	
 	//returns true if the card at the index specified was removed
-	protected boolean removecreditCard (int index) {
+	protected boolean removeCreditCard (int index) {
 		if(index != -1 && index < creditCardSize) {
 			for(int i = index; i < creditCardSize - 1; i++) {
 				userInformation[3][i] = userInformation[3][i + 1];
@@ -226,7 +236,7 @@ public class user {
 	}
 	
 	// returns the last 4 digits of the credit card
-	protected String getcreditCard (int index) {
+	protected String getCreditCard (int index) {
 		if(index < creditCardSize && index > -1) {
 			String card = userInformation[3][index];
 			return card.substring(card.length() - 4, card.length());
@@ -235,11 +245,11 @@ public class user {
 	}
 	
 	//used to add an order to the previous orders array
-	protected void addOrder(String name, itemInformation item, int quantity, String itemIndex) {
+	protected boolean addOrder(String name, itemInformation item, int quantity, String itemIndex) {
 		//String customerName, String itemName, String brand,  String image, double price, int quantity, String index, long time
 		Order itemOrder = new Order(name, item.getName(), item.getBrand(), item.getImage(), item.getPrice(), quantity, itemIndex, time.currentEpoch());
-		orders.addOrder(itemOrder);
 		incOrderSize();
+		return orders.addOrder(itemOrder);
 	}
 	
 	//gets the number of orders specified by the range, at starts at which index
@@ -271,4 +281,5 @@ public class user {
 	protected int orderSize() {
 		return orderSize;
 	}
+
 }
