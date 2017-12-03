@@ -245,9 +245,9 @@ public class user {
 	}
 	
 	//used to add an order to the previous orders array
-	protected boolean addOrder(String name, itemInformation item, int quantity, String itemIndex) {
+	protected boolean addOrder(String customerName, String itemName, String brand, String image, double price, int quantity, String itemIndex) {
 		//String customerName, String itemName, String brand,  String image, double price, int quantity, String index, long time
-		Order itemOrder = new Order(name, item.getName(), item.getBrand(), item.getImage(), item.getPrice(), quantity, itemIndex, time.currentEpoch());
+		Order itemOrder = new Order(customerName, itemName, brand, image, price, quantity, itemIndex, time.currentEpoch());
 		incOrderSize();
 		return orders.addOrder(itemOrder);
 	}
@@ -274,11 +274,28 @@ public class user {
 		return orders;
 	}
 	
+	//returns all orders of the user as a 2d array of strings making it easier to access the data
+	protected String[][] getAllPreviousOrders(){
+		Order[] allOrders = orders.getAllOrders();
+		String[][] orders = null;
+		if(allOrders != null) {
+			orders = new String[allOrders.length][5];
+			for(int i = 0; i < allOrders.length; i++) {
+				orders[i][0] = allOrders[i].getCustomerName();
+				orders[i][1] = allOrders[i].getIndex();
+				orders[i][2] = "" + allOrders[i].getPrice();
+				orders[i][3] = "" + allOrders[i].getQuantity();
+				orders[i][4] = time.epochToHuman(allOrders[i].getTime());
+			}
+		}
+		return orders;
+	}
+	
 	private void incOrderSize() {
 		orderSize++;
 	}
 	
-	protected int orderSize() {
+	protected int getOrderSize() {
 		return orderSize;
 	}
 

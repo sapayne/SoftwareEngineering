@@ -13,6 +13,11 @@ public class Password {
 		quantity = 1;
 	}
 	
+	//returns the password
+	protected String getPassword() {
+		return password;
+	}
+	
 	//returns true if the password entered matches the password in this password Object
 	protected boolean checkPassword(String password) {
 		if(password.compareTo(this.password) == 0) {

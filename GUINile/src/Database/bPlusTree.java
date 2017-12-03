@@ -149,7 +149,8 @@ public class BPlusTree {
 		}
 	}
 	
-	public String databaseIndex(String name) {
+	//used to return the index that's stored in the node, does the same as the search function
+	protected String databaseIndex(String name) {
 		Object[] item = search(name);
 		BTreeNode treeNode = (BTreeNode)item[0];
 		int index = (int)item[1];
@@ -164,7 +165,7 @@ public class BPlusTree {
 	/* returns the node that has the exact name as the name being searched for or it returns null if the 
 	 * node doesn't exist
 	 */
-	public Node searchTree(String name) {
+	protected Node searchTree(String name) {
 		current = treeRoot;
 		do {
 			if(isLeaf(current)) {
@@ -208,7 +209,7 @@ public class BPlusTree {
 	
 	//goes as far down to the left as possible then starts printing values from the furtherest left to the 
 	//furtherest right
-	public void incOrderPrint() {
+	protected void incOrderPrint() {
 		current = treeRoot;
 		while(current.getChild(0) instanceof BTreeNode) {
 			current = (BTreeNode) current.getChild(0);
@@ -226,7 +227,7 @@ public class BPlusTree {
 	/*	goes as far down to the right as possible then starts printing values from the furtherest right to the 
 	 *	furtherest left
 	 */
-	public void decOrderPrint() {
+	protected void decOrderPrint() {
 		current = treeRoot;
 		while(current.getChild(current.size()) instanceof BTreeNode) {
 			current = (BTreeNode) current.getChild(current.size());
@@ -243,7 +244,7 @@ public class BPlusTree {
 	
 	// searches for the name in the database then returns the next number of values (range) that match the 
 	// entered value the most, simplest from of auto-complete, change to return an array of nodes
-	public String[] printSimilar(String name, int range) {
+	protected String[] printSimilar(String name, int range) {
 		String[] array = null;
 		Object[] similarName = search(name);
 		current = ((BTreeNode)similarName[0]);
@@ -303,7 +304,7 @@ public class BPlusTree {
 	
 	//searches the tree then determines what category the item belongs too, then prints the other items in that
 	//category that come alphabetically after the item returned
-	public Node[] returnSimilar(String name, int range) {
+	protected Node[] returnSimilar(String name, int range) {
 		Node[] array = null; //determined by how many results can be displayed per page
 		Object[] similarName = search(name);
 		current = (BTreeNode) similarName[0];

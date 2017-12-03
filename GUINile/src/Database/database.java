@@ -1,26 +1,39 @@
 package Database;
 
+import java.io.File;
+import java.io.IOException;
+
 //written by Samuel Payne
 
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+
+import javafx.scene.image.Image;
 
 public class database implements DatabaseInterface{	
 	private BPlusTree itemTree, userTree, passwordTree;
 	private itemInformation item, currentIndexItem;
 	private Node currentNode;
 	private Order currentOrder;
-	private int size, itemAdjustmentFactor, userAdjustmentFactor, passwordAdjustmentFactor, itemAdjustmentIndex, userAdjustmentIndex, passwordAdjustmentIndex;
+	private int size;
 	private String category; //currently not used
 	/* saves which user is currently logged in, does this because we don't want to return the user object to the
 	 * UI as that would put security at risk, so instead the information is copied into a 2d array and then 
 	 * passed to the user (the person currently using the application.
 	 */
 	private user currentUser; 
+	private Password currentPassword;
+	private DatabaseReader reader;
+	private DatabaseWriter writer;
 	
 	
 	ArrayList<itemInformation> itemDatabase = new ArrayList<itemInformation>();
 	ArrayList<user> userDatabase = new ArrayList<user>();
 	ArrayList<Password> passwordDatabase = new ArrayList<Password>();
+	ArrayList<Integer> passwordAdjustmentIndex = new ArrayList<Integer>();
+	ArrayList<Integer> userAdjustmentIndex = new ArrayList<Integer>();
+	ArrayList<Integer> itemAdjustmentIndex = new ArrayList<Integer>();
 	
 	/* searches the b+ tree for similarly typed names as an auto-correct styled feature, returns the items who's
 	 * names match the most to the string entered, this method is meant to be called every time a character is
@@ -63,10 +76,8 @@ public class database implements DatabaseInterface{
 		return item;
 	}
 	
-	//TODO make it so the user is logged in to add data (name, shipping, billing, and credit card info)
-	
 	//returns false if the user was unable to add user information or the correct info type was passed
-	public boolean addInfo(String infoType, String info) {
+	public boolean addUserInfo(String infoType, String info) {
 		if(currentUser != null) {
 			switch(infoType) {
 			case "name":
@@ -86,13 +97,12 @@ public class database implements DatabaseInterface{
 		return false;
 	}
 	
-	//TODO
+	//returns false if the user isn't logged in or doesn't have the customer name in its database
 	public boolean addUserOrder(String customerName, String itemName, String brand, String image, double price, int quantity) {
 		if(currentUser != null && currentUser.hasName(customerName)) {
 			currentNode = itemTree.searchTree(itemName);
 			String index = currentNode.getIndex();
-			currentUser.addOrder(customerName, currentIndexItem, quantity, index);
-			//return addOrder(customerName);
+			return addOrder(customerName,itemName, brand, image, price, quantity, index);
 		}
 		return false;
 	}
@@ -117,9 +127,11 @@ public class database implements DatabaseInterface{
 		return currentUser.addCreditCard(card);
 	}
 	
-	private boolean addOrder(String customerName, itemInformation item, int quantity, String index) {
+	//returns false if the item didn't have enough stock for the quantity requested to buy
+	private boolean addOrder(String customerName, String itemName, String brand, String image, double price, int quantity, String index) {
 		if(quantity <= getItem(index).getStock()) {
-			
+			decItemQuantity(index,quantity);
+			return currentUser.addOrder(customerName,itemName, brand, image, price, quantity, index);
 		}
 		return false;
 	}
@@ -159,7 +171,7 @@ public class database implements DatabaseInterface{
 		return currentUser.removeBilling(index);
 	}
 	
-	//returns false if the card at the index couldn't be removed, either because the worng index was passed or no more cards could be removed
+	//returns false if the card at the index couldn't be removed, either because the wrong index was passed or no more cards could be removed
 	private boolean removeCard(int index) {
 		return currentUser.removeCreditCard(index);
 	}
@@ -170,10 +182,13 @@ public class database implements DatabaseInterface{
 			switch (infoType) {
 				case "name":
 					return getNames();
+					
 				case "ship":
 					return getShipping();
+				
 				case "bill":
 					return getBilling();
+				
 				case "card":
 					return getCards();
 			}
@@ -201,6 +216,7 @@ public class database implements DatabaseInterface{
 		return null;
 	}
 	
+	//returns all the shipping addresses the user has entered
 	private String[] getShipping() {
 		int size = currentUser.getShippingSize();
 		String[] shipping = new String[size];
@@ -210,6 +226,7 @@ public class database implements DatabaseInterface{
 		return null;
 	}
 	
+	//returns all the billing addresses the user has entered
 	private String[] getBilling() {
 		int size = currentUser.getBillingSize();
 		String[] billing = new String[size];
@@ -219,6 +236,7 @@ public class database implements DatabaseInterface{
 		return null;
 	}
 
+	//returns all the last 4 digits of each credit card the user has entered
 	private String[] getCards() {
 		int size = currentUser.getCreditCardSize();
 		String[] cards = new String[size];
@@ -228,6 +246,7 @@ public class database implements DatabaseInterface{
 		return null;
 	}
 	
+	//returns the previous orders of the user in a formatted 2d array, where all columns have the same data type but for different items
 	private String[][] getOrders(int index, int range) {
 		return currentUser.getPreviousOrder(index, range);
 	}
@@ -238,18 +257,23 @@ public class database implements DatabaseInterface{
 		return getUser(nodeArray[0].getIndex());
 	}
 	
-	private void addPassword(String password) {
-		// if the password doesn't exist then make a new password object
-		Password currentPassword = new Password(password);
-		// grabs the size of the database as that will become the index at which the password will exist after adding it to the database
-		int passwordIndex = passwordDatabase.size();
-		// adds password Object to the end of the database 
-		passwordDatabase.add(currentPassword);
-		// adds the password to the passwordTree and where it's located in the password database
-		passwordTree.add(password, "" + passwordIndex);
+	//checks if the password doesn't exist (-1), if doesn't exist it creates a new password; if it does exist it returns -1.
+	private int addPassword(String password) {
+		if(searchPassword(password) == -1) {
+			// if the password doesn't exist then make a new password object
+			Password currentPassword = new Password(password);
+			// grabs the size of the database as that will become the index at which the password will exist after adding it to the database
+			int passwordIndex = passwordDatabase.size();
+			// adds password Object to the end of the database 
+			passwordDatabase.add(currentPassword);
+			// adds the password to the passwordTree and where it's located in the password database
+			passwordTree.add(password, "" + passwordIndex);
+			return passwordIndex;
+		}
+		return -1;
 	}
 	
-	// returns the index at which the password can be found in the passwordDatabase
+	// returns the index at which the password can be found in the passwordDatabase, returns -1 if the password doesn't exist
 	private int searchPassword(String password) {
 		Node passwordToTest = passwordTree.searchTree(password);
 		if(password.compareTo(passwordToTest.getName()) == 0) {
@@ -258,8 +282,6 @@ public class database implements DatabaseInterface{
 		return -1;
 	}
 	
-	//TODO also the ability to delete the user's account, and remove account information one index at a time
-	
 	/* user has to be logged in, then changes password, if password doesn't exist (search function) then make a
 	 * new password, before setting the user's password to the new password; go to the old password and decease 
 	 * it's quantity and if it's quantity hits 0 remove the password from the password database then update the 
@@ -267,9 +289,48 @@ public class database implements DatabaseInterface{
 	 * the password is not unique then just set the user password index to the index where it exists in the 
 	 * password database.
 	 */
-	public boolean changePassword(String password) {
-		if(currentUser != null) { //means the user is logged in
-			
+	public boolean changePassword(String newPassword, String oldPassword) { 
+		if(currentUser != null && matches(oldPassword,currentUser)) { //means the user is logged in
+			int passwordIndex = addPassword(newPassword);
+			if(passwordIndex > -1) { //checks if the password's appended index is greater than -1, -1 being the return sequence for if the password already exists
+				decPasswordQuantity(currentUser.getPassword());
+				currentUser.setPassword(passwordIndex);
+			} else {
+				//search for the index the password that already exists then increase its quantity and point the 
+				//current user's password to the index found
+				passwordIndex = Integer.parseInt(passwordTree.searchTree(newPassword).getIndex());
+				incPasswordQuantity(passwordIndex);
+				currentUser.setPassword(passwordIndex);
+			}
+		}
+		return false;
+	}
+	
+	//increases the quantity of users using the password
+	private void incPasswordQuantity(int index) {
+		currentPassword = passwordDatabase.get(index);
+		currentPassword.incQuantity();
+	}
+	
+	//returns false if the index is out of bounds
+	private boolean decPasswordQuantity(int index) {
+		if(index < passwordDatabase.size() && index > -1) {
+			currentPassword = passwordDatabase.get(index);
+			currentPassword.decQuantity();
+			if(currentPassword.getQuantity() == 0) {
+				passwordAdjustmentIndex.add(index);
+				removePassword(index);
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	//returns false if the index passed is out of bounds
+	private boolean removePassword(int index) {
+		if(index < passwordDatabase.size() && index > -1) {
+			passwordDatabase.remove(index);
+			return true;
 		}
 		return false;
 	}
@@ -300,14 +361,33 @@ public class database implements DatabaseInterface{
 		return false;
 	}
 	
+	//returns false if the password was not correct or if no user is logged in
+	public boolean deleteAccount(String password) {
+		if (currentUser != null){
+			if(matches(password, currentUser)) {
+				//decreases the quantity of users using that unique password by 1
+				decPasswordQuantity(currentUser.getPassword());
+				//grab the index from the node that's stored in the 
+				String userIndex = userTree.searchTree(currentUser.getUserName()).getIndex();
+				//parses the string and grabs the integer portion of the user index, since there is no user categories the whole string is an integer
+				userAdjustmentIndex.add(Integer.parseInt(userIndex.substring(0, userIndex.length())));
+				//remove the user from the user b+ tree
+				userTree.delete(currentUser.getUserName());
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/* not used any longer as to not give the UI user the access to the itemInformation object
 	// searches similar items within a category and returns them to be used as a way to suggest common items
 	// based on a users previous searches
 	public itemInformation[] searchCategory(String name, int range) {
 		return null;
 	}
-	// TODO make it so the user has to add a name after making their account
+	*/
 	
-	// adds a new user to the user database
+	// adds a new user to the user database, but the new user will still need to log in
 	public boolean add(String username, String password) {
 		currentNode = userTree.searchTree(username);
 		Password currentPassword;
@@ -371,33 +451,35 @@ public class database implements DatabaseInterface{
 			return false;
 		}
 	}
-	
-	// TODO not finished
-	// return value is based on if the user could buy the amount of product they wanted
-	public boolean subtract(String index, int amountToSubtract) {
+
+	/* pass the string index of the item that is having it's stock being reduced, and how much of the quantity is
+	 * being reduced; check if the index is not out of bounds and that the item being purchased has at least the 
+	 * quantity being passed. subtract from the item quantity that's present and then add to the item's numberSold.
+	 * returns false if the item has less quantity then what is asked for, or the index points out of bounds of the 
+	 * item database in other words no item exists there.
+	 */
+	private boolean decItemQuantity(String index, int quantity) {
 		// later plan to change this to a switch statement as there will be multiple categories for the item 
 		// database, which will later allow for multiple database files.
 		if(index.substring(0, 3).compareTo("itm") == 0) {
 			int itemIndex = Integer.parseInt(index.substring(3, index.length()));
-			item = itemDatabase.get(itemIndex);
-			if(amountToSubtract <= item.getStock()) {
-				item.setStock(item.getStock() - amountToSubtract);
-				item.setNumberSold(item.getNumberSold() + amountToSubtract);
-				/* don't need the code below because if the item was deleted then the previousOrders couldn't work
-				 * properly when going to the item page to look at the description and other elements that aren't 
-				 * displayed on the previous orders page.
-				 * 				
-				if(item.getStock() == 0) {
-					delete("item",itemIndex);
+			if(itemIndex > -1 && itemIndex < itemDatabase.size()) {
+				item = itemDatabase.get(itemIndex);
+				if(quantity <= item.getStock()) {
+					item.setStock(item.getStock() - quantity);
+					item.setNumberSold(item.getNumberSold() + quantity);
+					/* don't need the code below because if the item was deleted then the previousOrders couldn't work
+					 * properly when going to the item page to look at the description and other elements that aren't 
+					 * displayed on the previous orders page.
+					 * 				
+					if(item.getStock() == 0) {
+						delete("item",itemIndex);
+					}
+					*/
+					return true;
 				}
-				*/
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			
-		}
+			} 
+		} 
 		return false;
 	}
 	
@@ -410,6 +492,28 @@ public class database implements DatabaseInterface{
 		int totalReviewed = item.getNumberSold() + 1;
 		item.setPopularity(popularity/totalReviewed);
 		item.setNumReviewed(totalReviewed);
+	}
+	
+	public Image loadImage(String fileName) {
+		Image image = new Image("file:../itemImages/" + fileName);
+		return image;
+	}
+	
+	//TODO make it so that you only peek the user files, as to only get the username and password; then when you
+	//log into one of the accounts it loads that user's whole file into memory
+	public boolean readDatabases() {
+		int i = 0;
+		
+		while(reader.read("user" + i + ".data", "user") != null) { // data type returned File
+			
+			i++;
+		}
+		return false;
+	}
+	
+	//TODO
+	public boolean writeDatabases() {
+		return false;
 	}
 	
 	// currently not used as even when an item gets to zero, there will be a need to reference it for 

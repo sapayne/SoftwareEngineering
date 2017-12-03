@@ -8,13 +8,26 @@ public class previousOrders {
 	    ArrayList<Order> previousOrder = new ArrayList<Order>();
 	    
 	    //adds an order to the previous orders database
-	    public boolean addOrder(Order order) {
+	    protected boolean addOrder(Order order) {
 			previousOrder.add(order);
 			return true;
 		}
+	    
+	    //returns all orders in the order they were added to the previous orders array list
+	    protected Order[] getAllOrders() {
+	    	Order[] orders = null;
+	    	if(previousOrder.isEmpty()) {
+	    		return orders;
+	    	}
+	    	orders = new Order[previousOrder.size()];
+	    	for(int i = 0; i < previousOrder.size(); i++) {
+	    		orders[i] = previousOrder.get(i);
+	    	}
+	    	return orders;
+	    }
 		
 	    //returns the range of previous orders if the index and range doesn't put the previous orders array out of bounds
-		public Order[] getPreviousOrders(int index, int range) {
+		protected Order[] getPreviousOrders(int index, int range) {
 			Order[] orders = null;
 			if(previousOrder.isEmpty()) {
 				return orders;
