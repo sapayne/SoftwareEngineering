@@ -42,9 +42,8 @@ import javafx.stage.Stage;
  * @author Quincy
  */
 public class GUI extends Application {
-    
-    static String user = "dqsz@gsu.edu";
-    static String password = "dqsz123";
+    static String user = "a";
+    static String password = "a";
     static String checkEmail, checkPass;
     
     public static void main(String[] args) {
@@ -88,6 +87,20 @@ public class GUI extends Application {
         login.add(loginButton, 1,8);
         loginButton.setId("loginButton");
         
+        Button signUpButton = new Button("Sign Up");
+        signUpButton.setPrefWidth(80);
+        signUpButton.setOnAction(e-> {
+            ((Node)e.getSource()).getScene().getWindow().hide();
+            Parent signUp = new SignUp().getView();
+            Scene scene = new Scene(signUp, 600, 400);
+            Stage signStage = new Stage();
+            signStage.initOwner(signUpButton.getScene().getWindow());
+            signStage.setScene(scene);
+            signStage.show();
+        });
+        login.add(signUpButton, 1,9);
+        signUpButton.setId("signUpButton");
+        
         //Label to show if email and password are correct
         final Label fail = new Label();
         login.add(fail, 1,7);
@@ -107,6 +120,7 @@ public class GUI extends Application {
         text1.setStyle("-fx-font: normal bold 24px 'times new roman' "); 
         text2.setStyle("-fx-font: normal bold 24px 'times new roman' ");
         fail.setStyle("-fx-font: normal bold 18px 'times new roman' ");
+        loginButton.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
         loginButton.setStyle("-fx-background-color: blue; -fx-text-fill: white;");
         login.setStyle("-fx-background-color: beige;");
         
