@@ -6,9 +6,7 @@ public class itemInformation {
 	private double price, weight, popularity;
 	private int stock, numberSold, numReviewed;
 
-	public itemInformation(String name, String brand, double price, int stock,
-			String category, double weight, double popularity, String image, 
-			int numberSold, String description, int numReviewed) {
+	public itemInformation(String name, String brand, String category, String description, String image, double price, double weight, int stock, int numberSold, double popularity,  int numReviewed) {
 		super();
 		this.name = name;
 		this.brand = brand;

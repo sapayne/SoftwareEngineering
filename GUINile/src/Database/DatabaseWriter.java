@@ -13,115 +13,152 @@ public class DatabaseWriter {
 	
 	protected boolean add(String fileName, itemInformation[] item) {
 		File filePath = new File("../" + fileName);
-		try {
-			FileWriter fileWriter = new FileWriter(filePath);
-			BufferedWriter writer = new BufferedWriter(fileWriter);
-			for(int i = 0; i < item.length; i++) {
-				itemInformation itemToWrite = item[i];
-				writer.write(itemToWrite.getName() + "," + itemToWrite.getBrand() + "," + itemToWrite.getCategory() + "," + itemToWrite.getDescription() + "," + itemToWrite.getImage() + "," + itemToWrite.getPrice() + "," + itemToWrite.getWeight() + "," + itemToWrite.getStock() + "," + itemToWrite.getNumberSold() + "," + itemToWrite.getPopularity() + "," + itemToWrite.getNumReviewed());
-				writer.newLine();
+		if(item == null) {
+			try {
+				FileWriter fileWriter = new FileWriter(filePath);
+				BufferedWriter writer = new BufferedWriter(fileWriter);
+				writer.write("");
+				writer.close();
+				return true;
+			} catch(IOException error) {
+				return false;
 			}
-			writer.close();
-			return true;
-		} catch (IOException error) {
-			return false;
+			
+		} else {
+			try {
+				FileWriter fileWriter = new FileWriter(filePath);
+				BufferedWriter writer = new BufferedWriter(fileWriter);
+				for(int i = 0; i < item.length; i++) {
+					itemInformation itemToWrite = item[i];
+					writer.write(itemToWrite.getName() + "," + itemToWrite.getBrand() + "," + itemToWrite.getCategory() + "," + itemToWrite.getDescription() + "," + itemToWrite.getImage() + "," + itemToWrite.getPrice() + "," + itemToWrite.getWeight() + "," + itemToWrite.getStock() + "," + itemToWrite.getNumberSold() + "," + itemToWrite.getPopularity() + "," + itemToWrite.getNumReviewed());
+					writer.newLine();
+				}
+				writer.close();
+				return true;
+			} catch (IOException error) {
+				return false;
+			}
 		}
 	}
 	
 	//writes all of the users information to a unique user file
 	protected boolean add(String fileName, user user) {
 		File filePath = new File("../users/" + fileName);
-		try {
-			FileWriter fileWriter = new FileWriter(filePath);
-			BufferedWriter writer = new BufferedWriter(fileWriter);
-			
-			//writes username (email address) and password index into the file
-			writer.write("username: " + user.getUserName());
-			writer.newLine();
-			writer.write("password: " + user.getPassword());
-			writer.newLine();
-			
-			//customer names file writing section
-			writer.write("name: ");
-			for(int i = 0; i < user.getNameSize(); i++) {
-				writer.write(user.getName(i));
-				if(i != user.getNameSize()-1) {
-					writer.write(", ");
-				}
+		if(user == null) {
+			try {
+				FileWriter fileWriter = new FileWriter(filePath);
+				BufferedWriter writer = new BufferedWriter(fileWriter);
+				writer.write("");
+				writer.close();
+				return true;
+			}catch(IOException error) {
+				return false;
 			}
-			writer.newLine();
-			
-			//shipping address file writing section
-			writer.write("shipping: ");
-			for(int i = 0; i < user.getShippingSize(); i++) {
-				writer.write(user.getShipping(i));
-				if(i != user.getShippingSize()-1) {
-					writer.write(", ");
-				}
-			}
-			writer.newLine();
-			
-			//billing address file writing section 
-			writer.write("billing: ");
-			for(int i = 0; i < user.getBillingSize(); i++) {
-				writer.write(user.getBilling(i));
-				if(i != user.getBillingSize()-1) {
-					writer.write(", ");
-				}
-			}
-			writer.newLine();
-			
-			//credit card file writing section
-			writer.write("card: ");
-			for(int i = 0; i < user.getCreditCardSize(); i++) {
-				writer.write(user.getCreditCard(i));
-				if(i != user.getCreditCardSize()-1) {
-					writer.write(", ");
-				}
-			}
-			writer.newLine();
-			
-			//format the previous orders correctly easiest format would probably be 
-			//[order info],[order info],...,[order info] will probably need 2 for loops
-			writer.write("previousOrders: ");
-			String[][] ordersToWrite = user.getAllPreviousOrders();
-			for(int i = 0; i < ordersToWrite.length; i++) {
-				writer.write("[");
-				for(int j = 0; j < 5; j++) {
-					writer.write(ordersToWrite[i][j]);
-					if(j != 4) {
+		} else {
+			try {
+				FileWriter fileWriter = new FileWriter(filePath);
+				BufferedWriter writer = new BufferedWriter(fileWriter);
+				
+				//writes username (email address) and password index into the file
+				writer.write("username: " + user.getUserName());
+				writer.newLine();
+				writer.write("password: " + user.getPassword());
+				writer.newLine();
+				
+				//customer names file writing section
+				writer.write("name: ");
+				for(int i = 0; i < user.getNameSize(); i++) {
+					writer.write(user.getName(i));
+					if(i != user.getNameSize()-1) {
 						writer.write(", ");
 					}
 				}
-				writer.write("]");
-				if(i != ordersToWrite.length - 1) {
-					writer.write(",");
+				writer.newLine();
+				
+				//shipping address file writing section
+				writer.write("shipping: ");
+				for(int i = 0; i < user.getShippingSize(); i++) {
+					writer.write(user.getShipping(i));
+					if(i != user.getShippingSize()-1) {
+						writer.write(", ");
+					}
 				}
+				writer.newLine();
+				
+				//billing address file writing section 
+				writer.write("billing: ");
+				for(int i = 0; i < user.getBillingSize(); i++) {
+					writer.write(user.getBilling(i));
+					if(i != user.getBillingSize()-1) {
+						writer.write(", ");
+					}
+				}
+				writer.newLine();
+				
+				//credit card file writing section
+				writer.write("card: ");
+				for(int i = 0; i < user.getCreditCardSize(); i++) {
+					writer.write(user.getCreditCard(i));
+					if(i != user.getCreditCardSize()-1) {
+						writer.write(", ");
+					}
+				}
+				writer.newLine();
+				
+				//format the previous orders correctly easiest format would probably be 
+				//[order info],[order info],...,[order info] will probably need 2 for loops
+				writer.write("previousOrders: ");
+				String[][] ordersToWrite = user.getAllPreviousOrders();
+				for(int i = 0; i < ordersToWrite.length; i++) {
+					writer.write("[");
+					for(int j = 0; j < 5; j++) {
+						writer.write(ordersToWrite[i][j]);
+						if(j != 4) {
+							writer.write(", ");
+						}
+					}
+					writer.write("]");
+					if(i != ordersToWrite.length - 1) {
+						writer.write(",");
+					}
+				}
+				writer.newLine();
+				
+				//closing file
+				writer.close();
+				return true;
+			} catch (IOException error) {
+				return false;
 			}
-			writer.newLine();
-			
-			//closing file
-			writer.close();
-			return true;
-		} catch (IOException error) {
-			return false;
 		}
 	}
 	
 	//used to write all the passwords in order to the file
 	protected boolean add(String fileName, Password[] passwords) {
 		File filePath = new File("../" + fileName);
-		try {
-			FileWriter fileWriter = new FileWriter(filePath);
-			BufferedWriter writer = new BufferedWriter(fileWriter);
-			for(int i =0; i < passwords.length; i++) {
-				writer.write(passwords[i].getPassword() + ", " + passwords[i].getQuantity());
-				writer.newLine();
+		if(passwords == null) {
+			try {
+				FileWriter fileWriter = new FileWriter(filePath);
+				BufferedWriter writer = new BufferedWriter(fileWriter);
+				writer.write("");
+				writer.close();
+				return true;
+			}catch(IOException error) {
+				return false;
 			}
-			writer.close();
-			return true;
-		}catch (IOException error) {
-			return false;
+		} else {
+			try {
+				FileWriter fileWriter = new FileWriter(filePath);
+				BufferedWriter writer = new BufferedWriter(fileWriter);
+				for(int i =0; i < passwords.length; i++) {
+					writer.write(passwords[i].getPassword() + ", " + passwords[i].getQuantity());
+					writer.newLine();
+				}
+				writer.close();
+				return true;
+			}catch (IOException error) {
+				return false;
+			}	
 		}
 	}
 

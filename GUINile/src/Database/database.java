@@ -1,6 +1,8 @@
 package Database;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 //written by Samuel Payne
@@ -16,7 +18,7 @@ public class database implements DatabaseInterface{
 	private itemInformation item, currentIndexItem;
 	private Node currentNode;
 	private Order currentOrder;
-	private int size;
+	private int size, itemDatabaseSize = 0, userDatabaseSize = 0, passwordDatabaseSize = 0;
 	private String category; //currently not used
 	/* saves which user is currently logged in, does this because we don't want to return the user object to the
 	 * UI as that would put security at risk, so instead the information is copied into a 2d array and then 
@@ -317,10 +319,10 @@ public class database implements DatabaseInterface{
 		if(index < passwordDatabase.size() && index > -1) {
 			currentPassword = passwordDatabase.get(index);
 			currentPassword.decQuantity();
-			if(currentPassword.getQuantity() == 0) {
+			/*if(currentPassword.getQuantity() == 0) {
 				passwordAdjustmentIndex.add(index);
 				removePassword(index);
-			}
+			}*/
 			return true;
 		}
 		return false;
@@ -415,8 +417,10 @@ public class database implements DatabaseInterface{
 	}
 	
 	// adds a new item to the item database
-	public boolean add(String name, String brand, double price, int stock, String category, double weight, String image, String description) {
-		itemInformation newItem = new itemInformation(name, brand, price, stock, category, weight, 0, image, 0, description, 0);
+	public boolean add(String name, String brand, String category, String description, String image, double price, double weight, int stock) {
+		//
+		//String name, String brand, double price, int stock, String category, double weight, String image, String description
+		itemInformation newItem = new itemInformation(name, brand, category, description, image, price, weight, stock, 0, 0, 0);
 		currentNode = itemTree.searchTree(name);
 		//search to see if the item exists in the database, if so add the quantity passed to the stock, if the 
 		//item doesn't exist add it to the database.
@@ -502,6 +506,74 @@ public class database implements DatabaseInterface{
 	//TODO make it so that you only peek the user files, as to only get the username and password; then when you
 	//log into one of the accounts it loads that user's whole file into memory
 	public boolean readDatabases() {
+		loadItems();
+		loadUsers();
+		loadPasswords();
+		
+		return false;
+	}
+	
+	private boolean loadItems() {
+		String fileName = "itemDatabase.data";
+		String line = null, name, brand, category, description, image, price, weight, stock, numberSold, popularity, numReviewed;
+		int itemIndex;
+		
+		try {
+			FileReader fileReader = new FileReader(this.reader.read(fileName, "item"));
+			BufferedReader reader = new BufferedReader(fileReader);
+			
+			//used to retrieve all the data of an item then puts it into the database and b+ tree
+			while((line = reader.readLine()) != null) {
+				
+				name = line.substring(0, line.indexOf(','));
+				line = line.substring(line.indexOf(',') + 1, line.length());
+				
+				brand = line.substring(0, line.indexOf(','));
+				line = line.substring(line.indexOf(',') + 1, line.length());
+				
+				category = line.substring(0, line.indexOf(','));
+				line = line.substring(line.indexOf(',') + 1, line.length());
+				
+				description = line.substring(0, line.indexOf(','));
+				line = line.substring(line.indexOf(',') + 1, line.length());
+				
+				image = line.substring(0, line.indexOf(','));
+				line = line.substring(line.indexOf(',') + 1, line.length());
+				
+				price = line.substring(0, line.indexOf(','));
+				line = line.substring(line.indexOf(',') + 1, line.length());
+				
+				weight = line.substring(0, line.indexOf(','));
+				line = line.substring(line.indexOf(',') + 1, line.length());
+				
+				stock = line.substring(0, line.indexOf(','));
+				line = line.substring(line.indexOf(',') + 1, line.length());
+				
+				numberSold = line.substring(0, line.indexOf(','));
+				line = line.substring(line.indexOf(',') + 1, line.length());
+				
+				popularity = line.substring(0, line.indexOf(','));
+				line = line.substring(line.indexOf(',') + 1, line.length());
+				
+				numReviewed = line.substring(0, line.indexOf(','));
+				line = line.substring(line.indexOf(',') + 1, line.length());
+				
+				this.item = new itemInformation(name, brand, category, description, image, Double.parseDouble(price), Double.parseDouble(weight), Integer.parseInt(stock), Integer.parseInt(numberSold), Double.parseDouble(popularity), Integer.parseInt(numReviewed));
+				itemIndex = itemDatabase.size();
+				itemDatabase.add(item);
+				itemTree.add(name, "" + itemIndex);
+				
+			}
+			itemDatabaseSize = itemDatabase.size();
+			reader.close();
+			return true;
+		} catch(IOException error) {
+			return false;
+		}
+	}
+	
+	//TODO
+	private boolean loadUsers() {
 		int i = 0;
 		
 		while(reader.read("user" + i + ".data", "user") != null) { // data type returned File
@@ -512,10 +584,42 @@ public class database implements DatabaseInterface{
 	}
 	
 	//TODO
-	public boolean writeDatabases() {
+	private boolean loadPasswords() {
 		return false;
 	}
 	
+	//TODO
+	public boolean writeDatabases() {
+		if(itemDatabaseSize != itemDatabase.size()) {
+			writeItemDatabase();
+		}
+		
+		return false;
+	}
+	
+	private boolean writeItemDatabase() {
+		itemInformation[] itemsToWrite = null;
+		if(itemDatabase.size() > 0) {
+			itemsToWrite = new itemInformation[itemDatabase.size()];
+			for(int i = 0; i < itemDatabase.size(); i++) {
+				itemsToWrite[i] = itemDatabase.get(i);
+			}
+		}
+		return writer.add("itemDatabase.data", itemsToWrite);
+	}
+	
+	//TODO
+	private boolean writeUserDatabase() {
+		user[] usersToWrite = null;
+		
+		return false;
+	}
+	
+	//TODO
+	private boolean writePasswordDatabase() {
+		
+		return false;
+	}
 	// currently not used as even when an item gets to zero, there will be a need to reference it for 
 	// previousOrders in the item database
 	/*

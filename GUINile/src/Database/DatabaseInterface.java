@@ -15,6 +15,9 @@ public interface DatabaseInterface {
 	//used to return the number (range) of previous orders' information to be displayed on the page
 	String[][] getUserOrders(int index, int range); //returns null if there are no items left in the user's previous orders
 	
+	//used to add user info such as customer names, shipping addresses, billing addresses, and credit cards
+	// enter "name", "ship", "bill", or "card" for infoType, and then the info you're adding for info
+	//returns false if you are unable to enter anymore info for that field
 	boolean addUserInfo(String infoType, String info);
 	
 	//adds the item just bought to the users previous orders array
@@ -35,13 +38,13 @@ public interface DatabaseInterface {
 	boolean logout();
 	
 	//only an option if the user is logged in, and then the user needs to re-enter their password
-	boolean deleteAccount(String password); //returns false if the password didn't match or the user wasn't logged in
+	//boolean deleteAccount(String password); //returns false if the password didn't match or the user wasn't logged in
 	
 	//used to create a new user, returns false if the user already exists
 	boolean add(String username, String password); //when adding the new user (signing up) also ask the user for their name and call the addName function
 
 	//used to add a new item, returns false if the item already exists, doesn't allow for the same item at multiple prices
-	boolean add(String name, String brand, double price, int stock, String category, double weight, String image, String description); 
+	boolean add(String name, String brand, String category, String description, String image, double price, double weight, int stock); 
 
 	void reviewItem(String itemName, int numOfStars);
 	
