@@ -100,11 +100,12 @@ public class database implements DatabaseInterface{
 	}
 	
 	//returns false if the user isn't logged in or doesn't have the customer name in its database
-	public boolean addUserOrder(String customerName, String itemName, String brand, String image, double price, int quantity) {
+	public boolean addUserOrder(String customerName, String itemName, double price, int quantity) {
 		if(currentUser != null && currentUser.hasName(customerName)) {
 			currentNode = itemTree.searchTree(itemName);
 			String index = currentNode.getIndex();
-			return addOrder(customerName,itemName, brand, image, price, quantity, index);
+			currentIndexItem = itemDatabase.get(Integer.parseInt(index.substring(3, index.length())));
+			return addOrder(customerName,itemName, currentIndexItem.getBrand(), currentIndexItem.getImage(), price, quantity, index);
 		}
 		return false;
 	}
@@ -611,6 +612,10 @@ public class database implements DatabaseInterface{
 	//TODO
 	private boolean writeUserDatabase() {
 		user[] usersToWrite = null;
+		if(userDatabase.size() > 0) {
+			usersToWrite = new user[userDatabase.size()];
+			
+		}
 		
 		return false;
 	}

@@ -21,7 +21,7 @@ public interface DatabaseInterface {
 	boolean addUserInfo(String infoType, String info);
 	
 	//adds the item just bought to the users previous orders array
-	boolean addUserOrder(String customerName, String itemName, String brand, String image, double price, int quantity);
+	boolean addUserOrder(String customerName, String itemName,  double price, int quantity);
 	
 	//allows the user to remove "name", "ship", "bill", "card" from their user info based on the index; 
 	//the getUserInfo will return the information in order, and from there the index could be passed using the 
