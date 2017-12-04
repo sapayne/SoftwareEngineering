@@ -63,6 +63,6 @@ public interface DatabaseInterface {
 	
 	//will write the databases when the systems shuts down
 	//has to be called right before the program stops running as to not lose data
-	boolean writeDatabases(); 
+	void writeDatabases(); 
 	
 }

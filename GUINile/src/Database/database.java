@@ -17,7 +17,7 @@ public class database implements DatabaseInterface{
 	private BPlusTree itemTree = new BPlusTree(20);
 	private BPlusTree userTree = new BPlusTree(5);
 	private BPlusTree passwordTree = new BPlusTree(10);
-	private itemInformation item, currentIndexItem;
+	private item item, currentIndexItem;
 	private Node currentNode;
 	private Order currentOrder;
 	private int size, itemDatabaseSize = 0, userDatabaseSize = 0, passwordDatabaseSize = 0;
@@ -32,7 +32,7 @@ public class database implements DatabaseInterface{
 	private DatabaseWriter writer;
 	
 	
-	ArrayList<itemInformation> itemDatabase = new ArrayList<itemInformation>();
+	ArrayList<item> itemDatabase = new ArrayList<item>();
 	ArrayList<user> userDatabase = new ArrayList<user>();
 	ArrayList<Password> passwordDatabase = new ArrayList<Password>();
 	ArrayList<Integer> passwordAdjustmentIndex = new ArrayList<Integer>();
@@ -66,7 +66,7 @@ public class database implements DatabaseInterface{
 	
 	// retrieves the item info and returns a copy of it as a string array
 	private String[] itemInfo(String index) {
-		itemInformation itemInfo = getItem(index);
+		item itemInfo = getItem(index);
 		String[] item = new String[9];
 		item[0] = itemInfo.getName();
 		item[1] = itemInfo.getBrand();
@@ -437,7 +437,7 @@ public class database implements DatabaseInterface{
 	public boolean add(String name, String brand, String category, String description, String image, double price, double weight, int stock) {
 		//
 		//String name, String brand, double price, int stock, String category, double weight, String image, String description
-		itemInformation newItem = new itemInformation(name, brand, category, description, image, price, weight, stock, 0, 0, 0);
+		item newItem = new item(name, brand, category, description, image, price, weight, stock, 0, 0, 0);
 		currentNode = itemTree.searchTree(name);
 		//search to see if the item exists in the database, if so add the quantity passed to the stock, if the 
 		//item doesn't exist add it to the database.
@@ -508,7 +508,7 @@ public class database implements DatabaseInterface{
 	public void reviewItem(String itemName, int numOfStars) {
 		Node currentItem = itemTree.searchTree(itemName);
 		String itemIndex = currentItem.getIndex();
-		itemInformation item = itemDatabase.get(Integer.parseInt(itemIndex.substring(3, itemIndex.length())));
+		item item = itemDatabase.get(Integer.parseInt(itemIndex.substring(3, itemIndex.length())));
 		double popularity = item.getPopularity() * item.getNumReviewed() + numOfStars;
 		int totalReviewed = item.getNumberSold() + 1;
 		item.setPopularity(popularity/totalReviewed);
@@ -516,7 +516,7 @@ public class database implements DatabaseInterface{
 	}
 	
 	public Image loadImage(String fileName) {
-		Image image = new Image("file:../itemImages/" + fileName);
+		Image image = new Image("file:/itemImages/" + fileName);
 		return image;
 	}
 	
@@ -571,7 +571,7 @@ public class database implements DatabaseInterface{
 				numReviewed = line.substring(0, line.indexOf(','));
 				line = line.substring(line.indexOf(',') + 1, line.length());
 				
-				this.item = new itemInformation(name, brand, category, description, image, Double.parseDouble(price), Double.parseDouble(weight), Integer.parseInt(stock), Integer.parseInt(numberSold), Double.parseDouble(popularity), Integer.parseInt(numReviewed));
+				this.item = new item(name, brand, category, description, image, Double.parseDouble(price), Double.parseDouble(weight), Integer.parseInt(stock), Integer.parseInt(numberSold), Double.parseDouble(popularity), Integer.parseInt(numReviewed));
 				itemIndex = itemDatabase.size();
 				itemDatabase.add(item);
 				itemTree.add(name, "" + itemIndex);
@@ -587,8 +587,7 @@ public class database implements DatabaseInterface{
 	
 	//TODO
 	private boolean loadUsers() {
-		String line = null, username ="", password = "", name = "", shipping = "", billing = "", card = "", previousOrders = "",
-				customerName, index, Price, Quantity, time;
+		String line = null, username ="", password = "", previousOrders = "", customerName, index, Price, Quantity, time;
 		int i = 0, linecount = 0, linesection = 0;
 		File filePath = reader.read("user" + i + ".data", "user");
 		while(filePath != null) { // data type returned File
@@ -598,27 +597,33 @@ public class database implements DatabaseInterface{
 				while((line = reader.readLine()) != null) {
 					if(linecount == 0) {
 						username = line.substring(line.indexOf(':') + 1,line.length());
+						linecount++;
 					} else if(linecount == 1) {
 						password = line.substring(line.indexOf(':') + 1,line.length());
+						linecount++;
 					} else if(linecount == 2) {
 						currentUser = new user(username,Integer.parseInt(password));
 						nameParser(line, currentUser);
+						linecount++;
 					} else if(linecount == 3) {
 						shippingParser(line, currentUser);
+						linecount++;
 					} else if(linecount == 4) {
 						billingParser(line, currentUser);
+						linecount++;
 					} else if(linecount == 5) {
 						cardParser(line, currentUser);
+						linecount++;
 					} else {
+						previousOrders = line.substring(line.indexOf(':'), line.length());
 						while(line.indexOf(',') != -1) {
+							
 							for(int j = 0; j < 5; j++) {
 								
 							}
 						}
 					}
-					linecount++;
 				}
-				
 				i++;
 				reader.close();
 			} catch(IOException error) {
@@ -720,23 +725,27 @@ public class database implements DatabaseInterface{
 	//TODO
 	private boolean loadPasswords() {
 		String line = null, password = null, quantity = null;
+		
 		this.currentPassword = new Password(password,Integer.parseInt(quantity));
 		return false;
 	}
 	
-	//TODO
-	public boolean writeDatabases() {
+	public void writeDatabases() {
 		if(itemDatabaseSize != itemDatabase.size()) {
 			writeItemDatabase();
 		}
-		
-		return false;
+		if(userDatabaseSize != userDatabase.size()) {
+			writeUserDatabase();
+		}
+		if(passwordDatabaseSize != passwordDatabase.size()) {
+			writePasswordDatabase();
+		}
 	}
 	
 	private boolean writeItemDatabase() {
-		itemInformation[] itemsToWrite = null;
+		item[] itemsToWrite = null;
 		if(itemDatabase.size() > 0) {
-			itemsToWrite = new itemInformation[itemDatabase.size()];
+			itemsToWrite = new item[itemDatabase.size()];
 			for(int i = 0; i < itemDatabase.size(); i++) {
 				itemsToWrite[i] = itemDatabase.get(i);
 			}
@@ -744,21 +753,27 @@ public class database implements DatabaseInterface{
 		return writer.add("itemDatabase.data", itemsToWrite);
 	}
 	
-	//TODO
 	private boolean writeUserDatabase() {
-		user[] usersToWrite = null;
+		user usersToWrite = null;
 		if(userDatabase.size() > 0) {
-			usersToWrite = new user[userDatabase.size()];
-			
+			for(int i = 0; i < userDatabase.size(); i++) {
+				usersToWrite = userDatabase.get(i);
+				writer.add("user" + i + ".data", usersToWrite);
+			}
+			return true;
 		}
-		
 		return false;
 	}
 	
-	//TODO
 	private boolean writePasswordDatabase() {
-		
-		return false;
+		Password[] passwordsToWrite = null;
+		if(passwordDatabase.size() > 0) {
+			passwordsToWrite = new Password[passwordDatabase.size()];
+			for(int i = 0; i < passwordDatabase.size(); i++) {
+				passwordsToWrite[i] = passwordDatabase.get(i);
+			}
+		}
+		return writer.add("passwordDatabase.data", passwordsToWrite);
 	}
 	// currently not used as even when an item gets to zero, there will be a need to reference it for 
 	// previousOrders in the item database
@@ -775,7 +790,7 @@ public class database implements DatabaseInterface{
 		}
 	}
 	*/
-	private itemInformation getItem(String index) {
+	private item getItem(String index) {
 		int itemIndex = Integer.parseInt(index.substring(3, index.length()));
 		return itemDatabase.get(itemIndex);
 	}

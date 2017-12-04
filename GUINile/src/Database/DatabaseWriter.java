@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class DatabaseWriter {
 	
-	protected boolean add(String fileName, itemInformation[] item) {
+	protected boolean add(String fileName, item[] item) {
 		if(item == null) {
 			try {
 				FileWriter fileWriter = new FileWriter("../" + fileName);
@@ -25,7 +25,7 @@ public class DatabaseWriter {
 				FileWriter fileWriter = new FileWriter("../" + fileName);
 				BufferedWriter writer = new BufferedWriter(fileWriter);
 				for(int i = 0; i < item.length; i++) {
-					itemInformation itemToWrite = item[i];
+					item itemToWrite = item[i];
 					writer.write(itemToWrite.getName() + "," + itemToWrite.getBrand() + "," + itemToWrite.getCategory() + "," + itemToWrite.getDescription() + "," + itemToWrite.getImage() + "," + itemToWrite.getPrice() + "," + itemToWrite.getWeight() + "," + itemToWrite.getQuantity() + "," + itemToWrite.getNumberSold() + "," + itemToWrite.getPopularity() + "," + itemToWrite.getNumReviewed());
 					writer.newLine();
 				}

@@ -1,68 +1,120 @@
 package Database;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-
-
-
 public class item {
-  
-	public static void main (String [] args) {
-		List<itemInformation> items = readItemsFromCSV("itemDatabase.csv");
-		for (itemInformation item: items) {
-			System.out.println(item);
-		}
+	
+	private String name, brand, category, description, image;
+	private double price, weight, popularity;
+	private int quantity, numberSold, numReviewed;
+
+	public item(String name, String brand, String category, String description, String image, double price, double weight, int quantity, int numberSold, double popularity,  int numReviewed) {
+		super();
+		this.name = name;
+		this.brand = brand;
+		this.category = category;
+		this.description = description;
+		this.image = image;
+		this.price = price;
+		this.weight = weight;
+		this.quantity = quantity;
+		this.numberSold = numberSold;
+		this.popularity = popularity;
+		this.numReviewed = numReviewed;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
-	private static List<itemInformation> readItemsFromCSV(String fileName) {
-		System.out.println(fileName);
-		List<itemInformation> items = new ArrayList<>();
-		Path pathToFile = Paths.get(fileName);
+	public String getImage() {
+		return image;
+	}
 
-		try (BufferedReader br = Files.newBufferedReader(pathToFile, StandardCharsets.US_ASCII)) {
+	public void setImage(String image) {
+		this.image = image;
+	}
 
-			String line = br.readLine();
+	public double getPrice() {
+		return price;
+	}
 
-			while (line != null) {
-				
-				String [] information = line.split(",");
-				
-				itemInformation item = createItem(information);
-				
-				items.add(item);
-				
-				line = br.readLine();
-			}
-			
-		}   catch (IOException ioe) {
-			    ioe.printStackTrace();
-		}
-		
-		return items;
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public double getWeight() {
+		return weight;
+	}
+
+	public void setWeight(double weight) {
+		this.weight = weight;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public int getNumberSold() {
+		return numberSold;
+	}
+
+	public void setNumberSold(int numberSold) {
+		this.numberSold = numberSold;
 	}
 	
-	private static itemInformation createItem(String[] metadata) {
-		String name = metadata[0];
-		String brand = metadata[1];
-		double price = Double.parseDouble(metadata[2]);
-		int stock = Integer.parseInt(metadata[3]);
-		String category = metadata[4];
-		double weight = Double.parseDouble(metadata[5]);
-		double popularity = Double.parseDouble(metadata[6]);
-		String image = metadata[7];
-		int numberSold = Integer.parseInt(metadata[8]);
-		String description = metadata[9];
-		int reviewed = Integer.parseInt(metadata[10]);
-		
-		
-	    return new itemInformation(name, brand, price, 
-				stock, category, weight, popularity, image, 
-				numberSold, description,reviewed);
+	public double getPopularity() {
+		return popularity;
 	}
+
+	public void setPopularity(double popularity) {
+		this.popularity = popularity;
+	}
+	
+	public int getNumReviewed() {
+		return numReviewed;
+	}
+	
+	public void setNumReviewed(int reviewed) {
+		numReviewed = reviewed;
+	}
+
+	/*public String toString() {
+		return "Item [name= " + name + ", brand=" + brand + ", price=" + price +
+				", quantity=" + quantity + ", category=" + category + 
+				", weight= " + weight + ", popularity= " + popularity +
+				", image= " + image + ", number sold= " + numberSold + 
+				", description= " + description + "]";
+	}*/
+	
 }
