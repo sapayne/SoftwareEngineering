@@ -1,6 +1,8 @@
 package application;
 
 
+
+import database.database;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,8 +24,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+/**
+*
+* @author dzheng
+*/
 public class cartScreen {
 	private GridPane window;
+    database product = new database();
+
 	
 	public cartScreen() {
                         

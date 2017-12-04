@@ -1,12 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package application;
+
+
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import database.database;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -29,6 +28,8 @@ import javafx.stage.Window;
  */
 public class SignUp {
     private GridPane sign;
+    database product = new database();
+
     
     public SignUp() {
         sign = new GridPane();
@@ -56,7 +57,7 @@ public class SignUp {
         sign.add(passL, 0, 4);
         PasswordField pass = new PasswordField();
         sign.add(pass, 1, 4);
-        
+                
         Button btn = new Button();
         btn.setText("Sign Up");
         btn.setOnAction(e-> {
@@ -80,6 +81,9 @@ public class SignUp {
             "Form Error!", "Please enter a valid password");
             return;
         }
+        
+        product.add(email.toString(), pass.toString());
+
 
         showAlert(Alert.AlertType.CONFIRMATION, sign.getScene().getWindow(), 
         "Registration Successful!", "Welcome " + fname.getText());
