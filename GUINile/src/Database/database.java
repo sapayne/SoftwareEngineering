@@ -1,16 +1,12 @@
 package Database;
 
+//written by Samuel Payne
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-
-//written by Samuel Payne
-
 import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
-
 import javafx.scene.image.Image;
 
 public class database implements DatabaseInterface{	
@@ -294,7 +290,6 @@ public class database implements DatabaseInterface{
 		} catch(NullPointerException error) {
 			return -1;
 		}
-		
 	}
 	
 	/* user has to be logged in, then changes password, if password doesn't exist (search function) then make a
@@ -520,7 +515,7 @@ public class database implements DatabaseInterface{
 		return image;
 	}
 	
-	//TODO make it so that you only peek the user files, as to only get the username and password; then when you
+	//good to have: make it so that you only peek the user files, as to only get the username and password; then when you
 	//log into one of the accounts it loads that user's whole file into memory
 	public boolean readDatabases() {
 		return loadItems() && loadPasswords() && loadUsers();
@@ -574,8 +569,7 @@ public class database implements DatabaseInterface{
 				this.item = new item(name, brand, category, description, image, Double.parseDouble(price), Double.parseDouble(weight), Integer.parseInt(stock), Integer.parseInt(numberSold), Double.parseDouble(popularity), Integer.parseInt(numReviewed));
 				itemIndex = itemDatabase.size();
 				itemDatabase.add(item);
-				itemTree.add(name, "" + itemIndex);
-				
+				itemTree.add(name, "itm" + itemIndex);
 			}
 			itemDatabaseSize = itemDatabase.size();
 			reader.close();
@@ -585,10 +579,9 @@ public class database implements DatabaseInterface{
 		}
 	}
 	
-	//TODO
 	private boolean loadUsers() {
-		String line = null, username ="", password = "", previousOrders = "", customerName, index, Price, Quantity, time;
-		int i = 0, linecount = 0, linesection = 0;
+		String line = null, username ="", password = "",  customerName, index, Price, Quantity, time;
+		int i = 0, linecount = 0;
 		File filePath = reader.read("user" + i + ".data", "user");
 		while(filePath != null) { // data type returned File
 			try {
@@ -615,12 +608,23 @@ public class database implements DatabaseInterface{
 						cardParser(line, currentUser);
 						linecount++;
 					} else {
-						previousOrders = line.substring(line.indexOf(':'), line.length());
+						line = line.substring(line.indexOf(':') + 1, line.length());
 						while(line.indexOf(',') != -1) {
+							customerName = line.substring(0, line.indexOf(','));
+							line = line.substring(line.indexOf(',') + 1, line.length());
 							
-							for(int j = 0; j < 5; j++) {
-								
-							}
+							index = line.substring(0, line.indexOf(','));
+							line = line.substring(line.indexOf(',') + 1, line.length());
+							
+							Price = line.substring(0, line.indexOf(','));
+							line = line.substring(line.indexOf(',') + 1, line.length());
+							
+							Quantity = line.substring(0, line.indexOf(','));
+							line = line.substring(line.indexOf(',') + 1, line.length());
+							
+							time = line.substring(0, line.indexOf(','));
+							line = line.substring(line.indexOf(',') + 1, line.length());
+							addUserPreviousOrder(customerName, index, Price, Quantity, time);
 						}
 					}
 				}
@@ -722,12 +726,26 @@ public class database implements DatabaseInterface{
 		}
 	}
 	
-	//TODO
 	private boolean loadPasswords() {
-		String line = null, password = null, quantity = null;
-		
-		this.currentPassword = new Password(password,Integer.parseInt(quantity));
-		return false;
+		int passwordIndex;
+		String line = null, password, quantity, filePath = "passwordDatabase.data";
+		try {
+			FileReader fileReader = new FileReader(this.reader.read(filePath, "pass"));
+			BufferedReader reader = new BufferedReader(fileReader);
+			while((line = reader.readLine()) != null) {
+				password = line.substring(0, line.indexOf(','));
+				quantity = line.substring(line.indexOf(',') + 1, line.length());
+				currentPassword = new Password(password,Integer.parseInt(quantity));
+				passwordIndex = passwordDatabase.size();
+				passwordDatabase.add(currentPassword);
+				passwordTree.add(password, "" + passwordIndex);
+			}
+			passwordDatabaseSize = passwordDatabase.size();
+			reader.close();
+			return true;
+		} catch(IOException error) {
+			return false;
+		}
 	}
 	
 	public void writeDatabases() {

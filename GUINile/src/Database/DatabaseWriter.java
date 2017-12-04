@@ -117,8 +117,6 @@ public class DatabaseWriter {
 						writer.write(",");
 					}*/
 				}
-				writer.newLine();
-				
 				//closing file
 				writer.close();
 				return true;
@@ -146,7 +144,9 @@ public class DatabaseWriter {
 				BufferedWriter writer = new BufferedWriter(fileWriter);
 				for(int i =0; i < passwords.length; i++) {
 					writer.write(passwords[i].getPassword() + ", " + passwords[i].getQuantity());
-					writer.newLine();
+					if(i != passwords.length - 1) {
+						writer.newLine();	
+					}
 				}
 				writer.close();
 				return true;
