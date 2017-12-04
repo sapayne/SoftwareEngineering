@@ -138,6 +138,11 @@ public class database implements DatabaseInterface{
 		}
 		return false;
 	}
+
+	private boolean addUserPreviousOrder(String customerName, String index, String Price, String Quantity, String time) {
+		currentIndexItem = getItem(index);
+		return currentUser.addPreviousOrder(customerName, currentIndexItem.getName(), currentIndexItem.getBrand(), currentIndexItem.getImage(), Double.parseDouble(Price), Integer.parseInt(Quantity), index, Long.parseLong(time));
+	}
 	
 	//returns false if the user is unable to remove user data
 	public boolean removeUserInfo(String infoType, int index) {
@@ -278,11 +283,16 @@ public class database implements DatabaseInterface{
 	
 	// returns the index at which the password can be found in the passwordDatabase, returns -1 if the password doesn't exist
 	private int searchPassword(String password) {
-		Node passwordToTest = passwordTree.searchTree(password);
-		if(password.compareTo(passwordToTest.getName()) == 0) {
-			return Integer.parseInt(passwordToTest.getIndex());
+		try {
+			Node passwordToTest = passwordTree.searchTree(password);	
+			if(password.compareTo(passwordToTest.getName()) == 0) {
+				return Integer.parseInt(passwordToTest.getIndex());
+			}
+			return -1;
+		} catch(NullPointerException error) {
+			return -1;
 		}
-		return -1;
+		
 	}
 	
 	/* user has to be logged in, then changes password, if password doesn't exist (search function) then make a
@@ -392,7 +402,11 @@ public class database implements DatabaseInterface{
 	
 	// adds a new user to the user database, but the new user will still need to log in
 	public boolean add(String username, String password) {
-		currentNode = userTree.searchTree(username);
+		try {
+			currentNode = userTree.searchTree(username);	
+		} catch(NullPointerException error) {
+			currentNode = null;
+		}
 		Password currentPassword;
 		int passwordIndex;
 		
@@ -571,21 +585,134 @@ public class database implements DatabaseInterface{
 	
 	//TODO
 	private boolean loadUsers() {
-		String line = null, username, password, name, shipping, billing, card, previousOrders;
-		int i = 0;
+		String line = null, username ="", password = "", name = "", shipping = "", billing = "", card = "", previousOrders = "",
+				customerName, index, Price, Quantity, time;
+		int i = 0, linecount = 0, linesection = 0;
 		File filePath = reader.read("user" + i + ".data", "user");
 		while(filePath != null) { // data type returned File
 			try {
 				FileReader fileReader = new FileReader(filePath);
 				BufferedReader reader = new BufferedReader(fileReader);
+				while((line = reader.readLine()) != null) {
+					if(linecount == 0) {
+						username = line.substring(line.indexOf(':') + 1,line.length());
+					} else if(linecount == 1) {
+						password = line.substring(line.indexOf(':') + 1,line.length());
+					} else if(linecount == 2) {
+						currentUser = new user(username,Integer.parseInt(password));
+						nameParser(line, currentUser);
+					} else if(linecount == 3) {
+						shippingParser(line, currentUser);
+					} else if(linecount == 4) {
+						billingParser(line, currentUser);
+					} else if(linecount == 5) {
+						cardParser(line, currentUser);
+					} else {
+						while(line.indexOf(',') != -1) {
+							for(int j = 0; j < 5; j++) {
+								
+							}
+						}
+					}
+					linecount++;
+				}
 				
 				i++;
+				reader.close();
 			} catch(IOException error) {
 				return false;
 			}
 			filePath = reader.read("user" + i + ".data", "user");
 		}
 		return true;
+	}
+	
+	private void nameParser(String line, user user) {
+		int linesection = 0;
+		String name;
+		while(linesection != 2) {
+			if(line.indexOf(',') != -1) {
+				if(linesection == 0) {
+					name = line.substring(line.indexOf(':'), line.indexOf(','));
+					line = line.substring(',' + 1, line.length());
+					linesection++;
+				} else {
+					name = line.substring(0, line.indexOf(','));
+					line = line.substring(',' + 1, line.length());
+				}
+				user.addName(name);
+			} else {
+				name = line.substring(0, line.length());
+				linesection = 2;
+				user.addName(name);
+			}
+		}
+	}
+	
+	private void shippingParser(String line, user user) {
+		int linesection = 0;
+		String shipping;
+		while(linesection != 2) {
+			if(line.indexOf(',') != -1) {
+				if(linesection == 0) {
+					shipping = line.substring(line.indexOf(':'), line.indexOf(','));
+					line = line.substring(',' + 1, line.length());
+					linesection++;
+				} else {
+					shipping = line.substring(0, line.indexOf(','));
+					line = line.substring(',' + 1, line.length());
+				}
+				user.addShipping(shipping);
+			} else {
+				shipping = line.substring(0, line.length());
+				linesection = 2;
+				user.addShipping(shipping);
+			}
+		}
+	}
+	
+	private void billingParser(String line, user user) {
+		int linesection = 0;
+		String billing;
+		while(linesection != 2) {
+			if(line.indexOf(',') != -1) {
+				if(linesection == 0) {
+					billing = line.substring(line.indexOf(':'), line.indexOf(','));
+					line = line.substring(',' + 1, line.length());
+					linesection++;
+				} else {
+					billing = line.substring(0, line.indexOf(','));
+					line = line.substring(',' + 1, line.length());
+				}
+				user.addBilling(billing);
+			} else {
+				billing = line.substring(0, line.length());
+				linesection = 2;
+				user.addBilling(billing);
+			}
+		}
+	}
+	
+	private void cardParser(String line, user user) {
+		int linesection = 0;
+		String card;
+		while(linesection != 2) {
+			if(line.indexOf(',') != -1) {
+				if(linesection == 0) {
+					card = line.substring(line.indexOf(':'), line.indexOf(','));
+					line = line.substring(',' + 1, line.length());
+					linesection++;
+				} else {
+					card = line.substring(0, line.indexOf(','));
+					line = line.substring(',' + 1, line.length());
+				}
+				user.addCreditCard(card);
+			} else {
+				card = line.substring(0, line.length());
+				linesection = 2;
+				user.addCreditCard(card);
+			}
+		}
 	}
 	
 	//TODO

@@ -105,17 +105,17 @@ public class DatabaseWriter {
 				writer.write("previousOrders: ");
 				String[][] ordersToWrite = user.getAllPreviousOrders();
 				for(int i = 0; i < ordersToWrite.length; i++) {
-					writer.write("[");
+					//writer.write("[");
 					for(int j = 0; j < 5; j++) {
 						writer.write(ordersToWrite[i][j]);
-						if(j != 4) {
-							writer.write(", ");
-						}
+						//if(j != 4) {
+							writer.write(",");
+						//}
 					}
-					writer.write("]");
+					/*writer.write("]");
 					if(i != ordersToWrite.length - 1) {
 						writer.write(",");
-					}
+					}*/
 				}
 				writer.newLine();
 				

@@ -252,6 +252,12 @@ public class user {
 		return orders.addOrder(itemOrder);
 	}
 	
+	protected boolean addPreviousOrder(String customerName, String itemName, String brand, String image, double price, int quantity, String itemIndex, long time) {
+		Order itemOrder = new Order(customerName, itemName, brand, image, price, quantity, itemIndex, time);
+		incOrderSize();
+		return orders.addOrder(itemOrder);
+	}
+	
 	//gets the number of orders specified by the range, at starts at which index
 	protected String[][] getPreviousOrder(int index, int range) {
 		Order[] previousOrders = orders.getPreviousOrders(index, range);
@@ -279,13 +285,16 @@ public class user {
 		Order[] allOrders = orders.getAllOrders();
 		String[][] orders = null;
 		if(allOrders != null) {
-			orders = new String[allOrders.length][5];
+			orders = new String[allOrders.length][8];
 			for(int i = 0; i < allOrders.length; i++) {
 				orders[i][0] = allOrders[i].getCustomerName();
-				orders[i][1] = allOrders[i].getIndex();
-				orders[i][2] = "" + allOrders[i].getPrice();
-				orders[i][3] = "" + allOrders[i].getQuantity();
-				orders[i][4] = time.epochToHuman(allOrders[i].getTime());
+				orders[i][1] = allOrders[i].getItemName();
+				orders[i][2] = allOrders[i].getBrand();
+				orders[i][3] = allOrders[i].getImage();
+				orders[i][4] = allOrders[i].getIndex();
+				orders[i][5] = "" + allOrders[i].getPrice();
+				orders[i][6] = "" + allOrders[i].getQuantity();
+				orders[i][7] = time.epochToHuman(allOrders[i].getTime());
 			}
 		}
 		return orders;
