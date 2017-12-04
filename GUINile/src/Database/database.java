@@ -14,7 +14,9 @@ import javax.imageio.ImageIO;
 import javafx.scene.image.Image;
 
 public class database implements DatabaseInterface{	
-	private BPlusTree itemTree, userTree, passwordTree;
+	private BPlusTree itemTree = new BPlusTree(20);
+	private BPlusTree userTree = new BPlusTree(5);
+	private BPlusTree passwordTree = new BPlusTree(10);
 	private itemInformation item, currentIndexItem;
 	private Node currentNode;
 	private Order currentOrder;
