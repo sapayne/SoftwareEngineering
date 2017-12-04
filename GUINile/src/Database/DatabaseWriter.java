@@ -3,19 +3,15 @@ package Database;
 //written by Samuel Payne
 
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class DatabaseWriter {
 	
 	protected boolean add(String fileName, itemInformation[] item) {
-		File filePath = new File("../" + fileName);
 		if(item == null) {
 			try {
-				FileWriter fileWriter = new FileWriter(filePath);
+				FileWriter fileWriter = new FileWriter("../" + fileName);
 				BufferedWriter writer = new BufferedWriter(fileWriter);
 				writer.write("");
 				writer.close();
@@ -26,11 +22,11 @@ public class DatabaseWriter {
 			
 		} else {
 			try {
-				FileWriter fileWriter = new FileWriter(filePath);
+				FileWriter fileWriter = new FileWriter("../" + fileName);
 				BufferedWriter writer = new BufferedWriter(fileWriter);
 				for(int i = 0; i < item.length; i++) {
 					itemInformation itemToWrite = item[i];
-					writer.write(itemToWrite.getName() + "," + itemToWrite.getBrand() + "," + itemToWrite.getCategory() + "," + itemToWrite.getDescription() + "," + itemToWrite.getImage() + "," + itemToWrite.getPrice() + "," + itemToWrite.getWeight() + "," + itemToWrite.getStock() + "," + itemToWrite.getNumberSold() + "," + itemToWrite.getPopularity() + "," + itemToWrite.getNumReviewed());
+					writer.write(itemToWrite.getName() + "," + itemToWrite.getBrand() + "," + itemToWrite.getCategory() + "," + itemToWrite.getDescription() + "," + itemToWrite.getImage() + "," + itemToWrite.getPrice() + "," + itemToWrite.getWeight() + "," + itemToWrite.getQuantity() + "," + itemToWrite.getNumberSold() + "," + itemToWrite.getPopularity() + "," + itemToWrite.getNumReviewed());
 					writer.newLine();
 				}
 				writer.close();
@@ -43,10 +39,9 @@ public class DatabaseWriter {
 	
 	//writes all of the users information to a unique user file
 	protected boolean add(String fileName, user user) {
-		File filePath = new File("../users/" + fileName);
 		if(user == null) {
 			try {
-				FileWriter fileWriter = new FileWriter(filePath);
+				FileWriter fileWriter = new FileWriter("../users/" + fileName);
 				BufferedWriter writer = new BufferedWriter(fileWriter);
 				writer.write("");
 				writer.close();
@@ -56,7 +51,7 @@ public class DatabaseWriter {
 			}
 		} else {
 			try {
-				FileWriter fileWriter = new FileWriter(filePath);
+				FileWriter fileWriter = new FileWriter("../users/" + fileName);
 				BufferedWriter writer = new BufferedWriter(fileWriter);
 				
 				//writes username (email address) and password index into the file
@@ -135,10 +130,9 @@ public class DatabaseWriter {
 	
 	//used to write all the passwords in order to the file
 	protected boolean add(String fileName, Password[] passwords) {
-		File filePath = new File("../" + fileName);
 		if(passwords == null) {
 			try {
-				FileWriter fileWriter = new FileWriter(filePath);
+				FileWriter fileWriter = new FileWriter("../" + fileName);
 				BufferedWriter writer = new BufferedWriter(fileWriter);
 				writer.write("");
 				writer.close();
@@ -148,7 +142,7 @@ public class DatabaseWriter {
 			}
 		} else {
 			try {
-				FileWriter fileWriter = new FileWriter(filePath);
+				FileWriter fileWriter = new FileWriter("../" + fileName);
 				BufferedWriter writer = new BufferedWriter(fileWriter);
 				for(int i =0; i < passwords.length; i++) {
 					writer.write(passwords[i].getPassword() + ", " + passwords[i].getQuantity());

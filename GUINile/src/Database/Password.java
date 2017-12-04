@@ -13,6 +13,11 @@ public class Password {
 		quantity = 1;
 	}
 	
+	protected Password(String password, int quantity) {
+		this.password = password;
+		this.quantity = quantity;
+	}
+	
 	//returns the password
 	protected String getPassword() {
 		return password;

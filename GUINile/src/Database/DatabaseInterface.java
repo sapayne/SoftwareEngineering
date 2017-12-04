@@ -6,14 +6,19 @@ public interface DatabaseInterface {
 	//returns the number (range) of item names, whose names match the substring passed, doesn't return the item database index
 	String[] searchBar(String name, int range);
 	
-	//returns a copy of the items' information that matched the substring passed, and number (range) of results allowed per page
+	//returns a copy of the items' information that matched the substring passed, and number (range) of results 
+	//allowed per page
+	//returns a 2d array where the range is the number of rows and the number of columns is always a static 
+	//9 columns being - name, brand, description, image, price, weight, quantity, popularity, numReviewed
 	String[][] searchResults(String name, int range);
 	
 	//used to return the user's customer names, shipping address, billing address, and credit card
-	String[] getUserInfo(String infoType); // enter "name", "ship", "bill", or "card" to get each respected data, returns false if one of the four strings is not used 
+	// enter "name", "ship", "bill", or "card" to get each respected data, returns false if one of the four strings is not used 
+	String[] getUserInfo(String infoType); 
 	
 	//used to return the number (range) of previous orders' information to be displayed on the page
-	String[][] getUserOrders(int index, int range); //returns null if there are no items left in the user's previous orders
+	//returns null if there are no items left in the user's previous orders
+	String[][] getUserOrders(int index, int range); 
 	
 	//used to add user info such as customer names, shipping addresses, billing addresses, and credit cards
 	// enter "name", "ship", "bill", or "card" for infoType, and then the info you're adding for info
@@ -21,7 +26,8 @@ public interface DatabaseInterface {
 	boolean addUserInfo(String infoType, String info);
 	
 	//adds the item just bought to the users previous orders array
-	boolean addUserOrder(String customerName, String itemName,  double price, int quantity);
+	//returns false if you tried to buy more quantity than there is available
+	boolean addUserOrder(String customerName, String itemName, double price, int quantity);
 	
 	//allows the user to remove "name", "ship", "bill", "card" from their user info based on the index; 
 	//the getUserInfo will return the information in order, and from there the index could be passed using the 
@@ -29,7 +35,8 @@ public interface DatabaseInterface {
 	boolean removeUserInfo(String infoType, int index);
 	
 	//used to test if the username and password match without giving straight access to the user and password classes
-	boolean login(String username, String password); //returns false if the username and password don't match or if the username doesn't exist
+	//returns false if the username and password don't match or if the username doesn't exist
+	boolean login(String username, String password); 
 	
 	//used change the current user's password
 	boolean changePassword(String newPassword, String oldPassword);
@@ -41,17 +48,21 @@ public interface DatabaseInterface {
 	//boolean deleteAccount(String password); //returns false if the password didn't match or the user wasn't logged in
 	
 	//used to create a new user, returns false if the user already exists
-	boolean add(String username, String password); //when adding the new user (signing up) also ask the user for their name and call the addName function
+	//when adding the new user (signing up) also ask the user for their name and call the addName function
+	boolean add(String username, String password); 
 
 	//used to add a new item, returns false if the item already exists, doesn't allow for the same item at multiple prices
 	boolean add(String name, String brand, String category, String description, String image, double price, double weight, int stock); 
 
+	//updates the popularity of an item by what the user rated it as
 	void reviewItem(String itemName, int numOfStars);
 	
 	//will load the databases when the system starts up
-	boolean readDatabases(); //has to be called when the program starts up
+	//has to be called when the program starts up
+	boolean readDatabases(); 
 	
 	//will write the databases when the systems shuts down
-	boolean writeDatabases(); //has to be called right before the program stops running as to not lose data
+	//has to be called right before the program stops running as to not lose data
+	boolean writeDatabases(); 
 	
 }

@@ -72,7 +72,7 @@ public class database implements DatabaseInterface{
 		item[3] = itemInfo.getImage();
 		item[4] = "" + itemInfo.getPrice();
 		item[5] = "" + itemInfo.getWeight();
-		item[6] = "" + itemInfo.getStock();
+		item[6] = "" + itemInfo.getQuantity();
 		item[7] = "" + itemInfo.getPopularity();
 		item[8] = "" + itemInfo.getNumReviewed();
 		return item;
@@ -132,7 +132,7 @@ public class database implements DatabaseInterface{
 	
 	//returns false if the item didn't have enough stock for the quantity requested to buy
 	private boolean addOrder(String customerName, String itemName, String brand, String image, double price, int quantity, String index) {
-		if(quantity <= getItem(index).getStock()) {
+		if(quantity <= getItem(index).getQuantity()) {
 			decItemQuantity(index,quantity);
 			return currentUser.addOrder(customerName,itemName, brand, image, price, quantity, index);
 		}
@@ -443,7 +443,7 @@ public class database implements DatabaseInterface{
 			//grab the already present item's values and add the current item's values to the current item.
 			//only stock, numberSold, popularity change, and number reviewed
 			currentIndexItem = itemDatabase.get(itemIndex);
-			currentIndexItem.setStock(currentIndexItem.getStock() + item.getStock());
+			currentIndexItem.setQuantity(currentIndexItem.getQuantity() + item.getQuantity());
 			// only updates the popularity if the item being passed already has a rating associated with it
 			if(item.getPopularity() != 0) {
 				// calculates the overall popularity
@@ -470,14 +470,14 @@ public class database implements DatabaseInterface{
 			int itemIndex = Integer.parseInt(index.substring(3, index.length()));
 			if(itemIndex > -1 && itemIndex < itemDatabase.size()) {
 				item = itemDatabase.get(itemIndex);
-				if(quantity <= item.getStock()) {
-					item.setStock(item.getStock() - quantity);
+				if(quantity <= item.getQuantity()) {
+					item.setQuantity(item.getQuantity() - quantity);
 					item.setNumberSold(item.getNumberSold() + quantity);
 					/* don't need the code below because if the item was deleted then the previousOrders couldn't work
 					 * properly when going to the item page to look at the description and other elements that aren't 
 					 * displayed on the previous orders page.
 					 * 				
-					if(item.getStock() == 0) {
+					if(item.getQuantity() == 0) {
 						delete("item",itemIndex);
 					}
 					*/
@@ -507,11 +507,7 @@ public class database implements DatabaseInterface{
 	//TODO make it so that you only peek the user files, as to only get the username and password; then when you
 	//log into one of the accounts it loads that user's whole file into memory
 	public boolean readDatabases() {
-		loadItems();
-		loadUsers();
-		loadPasswords();
-		
-		return false;
+		return loadItems() && loadPasswords() && loadUsers();
 	}
 	
 	private boolean loadItems() {
@@ -575,17 +571,27 @@ public class database implements DatabaseInterface{
 	
 	//TODO
 	private boolean loadUsers() {
+		String line = null, username, password, name, shipping, billing, card, previousOrders;
 		int i = 0;
-		
-		while(reader.read("user" + i + ".data", "user") != null) { // data type returned File
-			
-			i++;
+		File filePath = reader.read("user" + i + ".data", "user");
+		while(filePath != null) { // data type returned File
+			try {
+				FileReader fileReader = new FileReader(filePath);
+				BufferedReader reader = new BufferedReader(fileReader);
+				
+				i++;
+			} catch(IOException error) {
+				return false;
+			}
+			filePath = reader.read("user" + i + ".data", "user");
 		}
-		return false;
+		return true;
 	}
 	
 	//TODO
 	private boolean loadPasswords() {
+		String line = null, password = null, quantity = null;
+		this.currentPassword = new Password(password,Integer.parseInt(quantity));
 		return false;
 	}
 	

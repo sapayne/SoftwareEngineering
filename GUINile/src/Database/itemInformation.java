@@ -4,9 +4,9 @@ public class itemInformation {
 	
 	private String name, brand, category, description, image;
 	private double price, weight, popularity;
-	private int stock, numberSold, numReviewed;
+	private int quantity, numberSold, numReviewed;
 
-	public itemInformation(String name, String brand, String category, String description, String image, double price, double weight, int stock, int numberSold, double popularity,  int numReviewed) {
+	public itemInformation(String name, String brand, String category, String description, String image, double price, double weight, int quantity, int numberSold, double popularity,  int numReviewed) {
 		super();
 		this.name = name;
 		this.brand = brand;
@@ -15,7 +15,7 @@ public class itemInformation {
 		this.image = image;
 		this.price = price;
 		this.weight = weight;
-		this.stock = stock;
+		this.quantity = quantity;
 		this.numberSold = numberSold;
 		this.popularity = popularity;
 		this.numReviewed = numReviewed;
@@ -77,12 +77,12 @@ public class itemInformation {
 		this.weight = weight;
 	}
 
-	public int getStock() {
-		return stock;
+	public int getQuantity() {
+		return quantity;
 	}
 
-	public void setStock(int stock) {
-		this.stock = stock;
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
 	public int getNumberSold() {
@@ -111,7 +111,7 @@ public class itemInformation {
 
 	public String toString() {
 		return "Item [name= " + name + ", brand=" + brand + ", price=" + price +
-				", stock=" + stock + ", category=" + category + 
+				", quantity=" + quantity + ", category=" + category + 
 				", weight= " + weight + ", popularity= " + popularity +
 				", image= " + image + ", number sold= " + numberSold + 
 				", description= " + description + "]";
