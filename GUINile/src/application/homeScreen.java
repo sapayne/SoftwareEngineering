@@ -92,11 +92,29 @@ public class homeScreen {
 		
 		//creating the textfield for the search bar
                 TextField searchBar = new TextField();
-                String[] items = {"television", "shoes", "computers", "iron", "crib", "grill", "hsrry potter", "norton", "Star Wars", "colored pencils", "procesor", "oil"};
+                String[] items = {"television", "shoes", "macbook", "iron", "crib", "grill", "hsrry potter", "norton", "Star Wars", "colored pencils", "procesor", "oil"};
                 TextFields.bindAutoCompletion(searchBar, items);
                 searchBar.setOnKeyPressed(e-> {
                     if(e.getCode().equals(KeyCode.ENTER)){
-                        searchBar.getText();
+                        if (searchBar.getText().equals("macbook")){
+                            //hides the login screen once login is successful
+                    ((Node)e.getSource()).getScene().getWindow().hide();
+                    Parent itemTemp = new itemTemplate().getView();
+                    Stage item = new Stage();
+                    item.initOwner(searchBar.getScene().getWindow());
+                    //display home page
+                    
+                    Scene itemScene = new Scene(itemTemp, 1600, 900);
+                    item.setScene(itemScene);
+                    Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+
+                    //set Stage boundaries to visible bounds of the main screen
+                    item.setX(primaryScreenBounds.getMinX());
+                    item.setY(primaryScreenBounds.getMinY());
+                    item.setWidth(primaryScreenBounds.getWidth());
+                    item.setHeight(primaryScreenBounds.getHeight());
+                    item.show();
+                        };
                     }
                 });
                 
@@ -107,7 +125,25 @@ public class homeScreen {
 		//The search button
 		Button searchButton = new Button("Search");
                 searchButton.setOnAction(e-> {
-                   
+                   if (searchBar.getText().equals("macbook")){
+                            //hides the login screen once login is successful
+                    ((Node)e.getSource()).getScene().getWindow().hide();
+                    Parent itemTemp = new itemTemplate().getView();
+                    Stage item = new Stage();
+                    item.initOwner(searchButton.getScene().getWindow());
+                    //display home page
+                    
+                    Scene itemScene = new Scene(itemTemp, 1600, 900);
+                    item.setScene(itemScene);
+                    Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+
+                    //set Stage boundaries to visible bounds of the main screen
+                    item.setX(primaryScreenBounds.getMinX());
+                    item.setY(primaryScreenBounds.getMinY());
+                    item.setWidth(primaryScreenBounds.getWidth());
+                    item.setHeight(primaryScreenBounds.getHeight());
+                    item.show();
+                        };
                 });
                 searchButton.setPrefWidth(70);
 		GridPane.setConstraints(searchButton, 3, 0);

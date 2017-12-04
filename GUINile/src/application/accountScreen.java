@@ -18,10 +18,12 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.TextFields;
 
 /**
  *
@@ -87,15 +89,62 @@ public class accountScreen  {
                         GridPane.setConstraints(categoryBox, 1, 0);
 		
                         //creating the textfield for the search bar
-                        TextField searchBar = new TextField();
-                        searchBar.setPrefWidth(700);
-                        searchBar.setPromptText("search");
-                        GridPane.setConstraints(searchBar, 2, 0);
+                TextField searchBar = new TextField();
+                String[] items = {"television", "shoes", "macbook", "iron", "crib", "grill", "hsrry potter", "norton", "Star Wars", "colored pencils", "procesor", "oil"};
+                TextFields.bindAutoCompletion(searchBar, items);
+                searchBar.setOnKeyPressed(e-> {
+                    if(e.getCode().equals(KeyCode.ENTER)){
+                        if (searchBar.getText().equals("macbook")){
+                            //hides the login screen once login is successful
+                    ((Node)e.getSource()).getScene().getWindow().hide();
+                    Parent itemTemp = new itemTemplate().getView();
+                    Stage item = new Stage();
+                    item.initOwner(searchBar.getScene().getWindow());
+                    //display home page
+                    
+                    Scene itemScene = new Scene(itemTemp, 1600, 900);
+                    item.setScene(itemScene);
+                    Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+
+                    //set Stage boundaries to visible bounds of the main screen
+                    item.setX(primaryScreenBounds.getMinX());
+                    item.setY(primaryScreenBounds.getMinY());
+                    item.setWidth(primaryScreenBounds.getWidth());
+                    item.setHeight(primaryScreenBounds.getHeight());
+                    item.show();
+                        };
+                    }
+                });
+                
+                searchBar.setPrefWidth(700);
+                searchBar.setPromptText("search");
+		GridPane.setConstraints(searchBar, 2, 0);
 		
-                        //The search button
-                        Button searchButton = new Button("Search");
-                        searchButton.setPrefWidth(70);
-                        GridPane.setConstraints(searchButton, 3, 0);
+		//The search button
+		Button searchButton = new Button("Search");
+                searchButton.setOnAction(e-> {
+                   if (searchBar.getText().equals("macbook")){
+                            //hides the login screen once login is successful
+                    ((Node)e.getSource()).getScene().getWindow().hide();
+                    Parent itemTemp = new itemTemplate().getView();
+                    Stage item = new Stage();
+                    item.initOwner(searchButton.getScene().getWindow());
+                    //display home page
+                    
+                    Scene itemScene = new Scene(itemTemp, 1600, 900);
+                    item.setScene(itemScene);
+                    Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+
+                    //set Stage boundaries to visible bounds of the main screen
+                    item.setX(primaryScreenBounds.getMinX());
+                    item.setY(primaryScreenBounds.getMinY());
+                    item.setWidth(primaryScreenBounds.getWidth());
+                    item.setHeight(primaryScreenBounds.getHeight());
+                    item.show();
+                        };
+                });
+                searchButton.setPrefWidth(70);
+		GridPane.setConstraints(searchButton, 3, 0);
 		
                         //Row of Buttons and drop down for the task bar on the Nile 
                         Button browHist = new Button("Browsing History");
