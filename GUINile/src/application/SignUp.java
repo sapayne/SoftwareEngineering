@@ -5,7 +5,7 @@ package application;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import database.database;
+import Database.database;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;

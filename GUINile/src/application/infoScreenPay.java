@@ -3,8 +3,8 @@ package application;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 
-import database.Product;
-import database.database;
+import Database.Product;
+import Database.database;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
