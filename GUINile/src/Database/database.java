@@ -1,5 +1,7 @@
 package Database;
 
+import java.awt.image.BufferedImage;
+
 //written by Samuel Payne
 
 import java.io.BufferedReader;
@@ -7,7 +9,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
+
 
 public class database implements DatabaseInterface{	
 	private BPlusTree itemTree = new BPlusTree(20);
@@ -542,9 +547,18 @@ public class database implements DatabaseInterface{
 		item.setNumReviewed(totalReviewed);
 	}
 	
-	public Image loadImage(String fileName) {
-		Image image = new Image("itemImages/" + fileName);
-		return image;
+	//correctly loads images from local storage
+	public Image loadImage(String fileName, int width, int height) {
+        BufferedImage readImage = null;
+			try {
+				readImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+				readImage = ImageIO.read(reader.read(fileName, "image"));
+				Image image = SwingFXUtils.toFXImage(readImage, null);
+				return image;
+			} catch (IOException error) {
+				System.out.println("no image display");
+				return null;
+			}
 	}
 	
 	//good to have: make it so that you only peek the user files, as to only get the username and password; then when you

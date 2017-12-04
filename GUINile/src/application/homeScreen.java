@@ -13,7 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
-import org.controlsfx.control.textfield.TextFields;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -93,7 +92,6 @@ public class homeScreen {
 		//creating the textfield for the search bar
                 TextField searchBar = new TextField();
                 String[] items = {"hello", "shoes", "computers"};
-                TextFields.bindAutoCompletion(searchBar, items);
                 
                 searchBar.setPrefWidth(700);
                 searchBar.setPromptText("search");
@@ -200,10 +198,10 @@ public class homeScreen {
                     });
 		GridPane.setConstraints(cartButton, 8, 1);
                 
-                File dir = new File("./Belkin.png");
-                System.out.println(dir.getAbsolutePath());
+		//TODO this isn't a to do it's just to show you what two lines you need to write to grab the images, fileName won't always be hard coded
+				String fileName = "Belkin.jpg";
+                Image img = product.loadImage(fileName,500,500); //filename, width, height
                 
-                Image img = new Image("file:.\\Belkin.png");
                 ImageView imageView1 = new ImageView(img);
                 Button image1 = new Button();
                 image1.setGraphic(imageView1);

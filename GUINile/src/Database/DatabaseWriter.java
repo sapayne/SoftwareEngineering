@@ -3,6 +3,7 @@ package Database;
 //written by Samuel Payne
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -11,7 +12,10 @@ public class DatabaseWriter {
 	protected boolean add(String fileName, item[] item) {
 		if(item == null) {
 			try {
-				FileWriter fileWriter = new FileWriter("../" + fileName);
+				File dir = new File(fileName);
+				String filePath = dir.getAbsolutePath();
+				File file = new File(filePath.substring(0,dir.getAbsolutePath().lastIndexOf(fileName)) + "src//" + fileName);
+				FileWriter fileWriter = new FileWriter(file);
 				BufferedWriter writer = new BufferedWriter(fileWriter);
 				writer.write("");
 				writer.close();
@@ -22,7 +26,10 @@ public class DatabaseWriter {
 			
 		} else {
 			try {
-				FileWriter fileWriter = new FileWriter("../" + fileName);
+				File dir = new File(fileName);
+				String filePath = dir.getAbsolutePath();
+				File file = new File(filePath.substring(0,dir.getAbsolutePath().lastIndexOf(fileName)) + "src//" + fileName);
+				FileWriter fileWriter = new FileWriter(file);
 				BufferedWriter writer = new BufferedWriter(fileWriter);
 				for(int i = 0; i < item.length; i++) {
 					item itemToWrite = item[i];
@@ -41,7 +48,10 @@ public class DatabaseWriter {
 	protected boolean add(String fileName, user user) {
 		if(user == null) {
 			try {
-				FileWriter fileWriter = new FileWriter("../users/" + fileName);
+				File dir = new File(fileName);
+				String filePath = dir.getAbsolutePath();
+				File file = new File(filePath.substring(0,dir.getAbsolutePath().lastIndexOf(fileName)) + "src//users//" + fileName);
+				FileWriter fileWriter = new FileWriter(file);
 				BufferedWriter writer = new BufferedWriter(fileWriter);
 				writer.write("");
 				writer.close();
@@ -51,7 +61,10 @@ public class DatabaseWriter {
 			}
 		} else {
 			try {
-				FileWriter fileWriter = new FileWriter("../users/" + fileName);
+				File dir = new File(fileName);
+				String filePath = dir.getAbsolutePath();
+				File file = new File(filePath.substring(0,dir.getAbsolutePath().lastIndexOf(fileName)) + "src//users//" + fileName);
+				FileWriter fileWriter = new FileWriter(file);
 				BufferedWriter writer = new BufferedWriter(fileWriter);
 				
 				//writes username (email address) and password index into the file
@@ -128,9 +141,23 @@ public class DatabaseWriter {
 	
 	//used to write all the passwords in order to the file
 	protected boolean add(String fileName, Password[] passwords) {
+		/*
+	 File dir = new File(fileName);
+        String filePath = dir.getAbsolutePath();
+			try {
+				File file = new File(filePath.substring(0,dir.getAbsolutePath().lastIndexOf(fileName)) + "src//itemImages//" + fileName);
+				return image;
+			} catch (IOException error) {
+				System.out.println("no image display");
+				return null;
+			}
+		 */
 		if(passwords == null) {
 			try {
-				FileWriter fileWriter = new FileWriter("../" + fileName);
+				File dir = new File(fileName);
+				String filePath = dir.getAbsolutePath();
+				File file = new File(filePath.substring(0,dir.getAbsolutePath().lastIndexOf(fileName)) + "src//" + fileName);
+				FileWriter fileWriter = new FileWriter(file);
 				BufferedWriter writer = new BufferedWriter(fileWriter);
 				writer.write("");
 				writer.close();
@@ -140,7 +167,10 @@ public class DatabaseWriter {
 			}
 		} else {
 			try {
-				FileWriter fileWriter = new FileWriter("../" + fileName);
+				File dir = new File(fileName);
+				String filePath = dir.getAbsolutePath();
+				File file = new File(filePath.substring(0,dir.getAbsolutePath().lastIndexOf(fileName)) + "src//" + fileName);
+				FileWriter fileWriter = new FileWriter(file);
 				BufferedWriter writer = new BufferedWriter(fileWriter);
 				for(int i =0; i < passwords.length; i++) {
 					writer.write(passwords[i].getPassword() + ", " + passwords[i].getQuantity());

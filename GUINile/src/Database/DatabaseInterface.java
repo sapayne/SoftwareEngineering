@@ -1,5 +1,7 @@
 package Database;
 
+import javafx.scene.image.Image;
+
 //written by Samuel Payne
 
 public interface DatabaseInterface {
@@ -65,6 +67,11 @@ public interface DatabaseInterface {
 
 	//updates the popularity of an item by what the user rated it as
 	void reviewItem(String itemName, int numOfStars);
+	
+	//pass the filename of the image you want to retrieve along with the size, example loadImage("Belkin.jpg",500,500)
+	//however the filename will be given to the user through the searchResults function which returns a 2d array
+	//of size [range][9] and the 4th column (index 3) will be where all the image filenames of the items will be found
+	Image loadImage(String fileName, int width, int height);
 	
 	//will load the databases when the system starts up
 	//has to be called when the program starts up
