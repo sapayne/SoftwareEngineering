@@ -22,6 +22,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import org.controlsfx.control.textfield.TextFields;
 
 /**
  *
@@ -91,7 +92,13 @@ public class homeScreen {
 		
 		//creating the textfield for the search bar
                 TextField searchBar = new TextField();
-                String[] items = {"hello", "shoes", "computers"};
+                String[] items = {"television", "shoes", "computers", "iron", "crib", "grill", "hsrry potter", "norton", "Star Wars", "colored pencils", "procesor", "oil"};
+                TextFields.bindAutoCompletion(searchBar, items);
+                searchBar.setOnKeyPressed(e-> {
+                    if(e.getCode().equals(KeyCode.ENTER)){
+                        searchBar.getText();
+                    }
+                });
                 
                 searchBar.setPrefWidth(700);
                 searchBar.setPromptText("search");
@@ -99,6 +106,9 @@ public class homeScreen {
 		
 		//The search button
 		Button searchButton = new Button("Search");
+                searchButton.setOnAction(e-> {
+                   
+                });
                 searchButton.setPrefWidth(70);
 		GridPane.setConstraints(searchButton, 3, 0);
 		
@@ -199,10 +209,10 @@ public class homeScreen {
 		GridPane.setConstraints(cartButton, 8, 1);
                 
 		//TODO this isn't a to do it's just to show you what two lines you need to write to grab the images, fileName won't always be hard coded
-				String fileName = "Belkin.jpg";
+		String fileName = "Belkin.jpg";
                 Image img = product.loadImage(fileName,500,500); //filename, width, height
                 
-                ImageView imageView1 = new ImageView(img);
+                ImageView imageView1 = new ImageView(new Image("https://blog.logoscdn.com/wp-content/uploads/Christmas-January-6.png"));
                 Button image1 = new Button();
                 image1.setGraphic(imageView1);
                 imageView1.setFitWidth(1000);
