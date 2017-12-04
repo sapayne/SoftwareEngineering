@@ -28,6 +28,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -44,7 +45,6 @@ public class GUI extends Application {
     static String password = "a";
     static String checkEmail, checkPass;
     database product = new database();
-
     
     public static void main(String[] args) {
         launch(args);
@@ -137,7 +137,44 @@ public class GUI extends Application {
         loginStage.show();
         
         //closes all the windows when 'X' is pressed
-        loginStage.setOnCloseRequest(e -> Platform.exit());
+        loginStage.setOnCloseRequest(e -> {
+            product.writeDatabases();
+            Platform.exit();
+                });
+    pass.setOnKeyPressed(event-> {
+        if (event.getCode().equals(KeyCode.ENTER)){
+            //Determines if email and password are correct
+        checkEmail = email.getText().toString();
+        checkPass = pass.getText().toString();
+        if(checkEmail.equals(user) && checkPass.equals(password)){
+        
+        //hides the login screen once login is successful
+        ((Node)event.getSource()).getScene().getWindow().hide();
+        Parent homeScreen = new homeScreen().getView();
+        Stage home = new Stage();
+        home.initOwner(loginButton.getScene().getWindow());
+        //display home page
+        Scene homeScene = new Scene(homeScreen, 1600, 900);
+        home.setScene(homeScene);
+        
+        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+
+        //set Stage boundaries to visible bounds of the main screen
+        home.setX(primaryScreenBounds.getMinX());
+        home.setY(primaryScreenBounds.getMinY());
+        home.setWidth(primaryScreenBounds.getWidth());
+        home.setHeight(primaryScreenBounds.getHeight());
+        
+        home.show();
+        }
+        else{
+           fail.setText("Incorrect email and/or password");
+           fail.setTextFill(Color.RED);
+        }
+        email.setText("");
+        pass.setText("");
+        }
+    });
         
     loginButton.setOnAction(e-> {
         //Determines if email and password are correct

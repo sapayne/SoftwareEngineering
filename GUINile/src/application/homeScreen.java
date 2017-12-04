@@ -1,6 +1,7 @@
 package application;
 
 import Database.database;
+import java.io.File;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -10,11 +11,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import org.controlsfx.control.textfield.TextFields;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
@@ -90,6 +92,9 @@ public class homeScreen {
 		
 		//creating the textfield for the search bar
                 TextField searchBar = new TextField();
+                String[] items = {"hello", "shoes", "computers"};
+                TextFields.bindAutoCompletion(searchBar, items);
+                
                 searchBar.setPrefWidth(700);
                 searchBar.setPromptText("search");
 		GridPane.setConstraints(searchBar, 2, 0);
@@ -195,7 +200,11 @@ public class homeScreen {
                     });
 		GridPane.setConstraints(cartButton, 8, 1);
                 
-                ImageView imageView1 = new ImageView(new Image("https://blog.logoscdn.com/wp-content/uploads/Christmas-January-6.png"));
+                File dir = new File("./Belkin.png");
+                System.out.println(dir.getAbsolutePath());
+                
+                Image img = new Image("file:.\\Belkin.png");
+                ImageView imageView1 = new ImageView(img);
                 Button image1 = new Button();
                 image1.setGraphic(imageView1);
                 imageView1.setFitWidth(1000);
@@ -273,6 +282,7 @@ public class homeScreen {
 				ordersButton, cartButton, image1,  hb, hb2);
         
     }
+    
     public Parent getView(){
         return home;
     }
