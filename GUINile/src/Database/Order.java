@@ -8,7 +8,7 @@ public class Order {
 	private long time;
 	
 	//no setters needed as you will never change the contents of an order after it's been placed
-	public Order(String customerName, String itemName, String brand,  String image, double price, int quantity, String index, long time) {
+	protected Order(String customerName, String itemName, String brand,  String image, double price, int quantity, String index, long time) {
 		this.customerName = customerName;
 		this.itemName = itemName;
 		this.brand = brand;
@@ -19,60 +19,60 @@ public class Order {
 		this.time = time;
 	}
 	
-	public String getCustomerName() {
+	protected String getCustomerName() {
 		return customerName;
 	}
 	/*
-	public void setCustomerName(String customerName){
+	protected void setCustomerName(String customerName){
 		this.customerName = customerName;
 	}
 	 */
 
-	public String getItemName() {
+	protected String getItemName() {
 		return itemName;
 	}
 	/*
-	public void setItemName(String itemName) {
+	protected void setItemName(String itemName) {
 		this.itemName = itemName;
 	}
 	*/
-	public String getBrand() {
+	protected String getBrand() {
 		return brand;
 	}
 	/*
-	public void setBrand(String brand) {
+	protected void setBrand(String brand) {
 		this.brand = brand;
 	}
 	*/
-	public String getImage() {
+	protected String getImage() {
 		return image;
 	}
 	/*
-	public void setImage(String image) {
+	protected void setImage(String image) {
 		this.image = image;
 	}
 	*/
-	public String getIndex() {
+	protected String getIndex() {
 		return index;
 	}
 	
-	public double getPrice() {
+	protected double getPrice() {
 		return price;
 	}
 	/*
-	public void setPrice(double price) {
+	protected void setPrice(double price) {
 		this.price = price;
 	}
 	*/
-	public int getQuantity() {
+	protected int getQuantity() {
 		return quantity;
 	}
 	/*
-	public void setQuantity(int quantity) {
+	protected void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
 	*/
-	public long getTime() {
+	protected long getTime() {
 		return time;
 	}
 	//no set time needed as you are never changing or updating, once the customer has bought an item

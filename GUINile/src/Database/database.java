@@ -31,6 +31,7 @@ public class database implements DatabaseInterface{
 	ArrayList<item> itemDatabase = new ArrayList<item>();
 	ArrayList<user> userDatabase = new ArrayList<user>();
 	ArrayList<Password> passwordDatabase = new ArrayList<Password>();
+	ArrayList<item> cart = new ArrayList<item>();
 	ArrayList<Integer> passwordAdjustmentIndex = new ArrayList<Integer>();
 	ArrayList<Integer> userAdjustmentIndex = new ArrayList<Integer>();
 	ArrayList<Integer> itemAdjustmentIndex = new ArrayList<Integer>();
@@ -74,6 +75,37 @@ public class database implements DatabaseInterface{
 		item[7] = "" + itemInfo.getPopularity();
 		item[8] = "" + itemInfo.getNumReviewed();
 		return item;
+	}
+	
+	//returns false if there was an issue adding the add to the cart
+	public boolean addItemToCart(String name, int quantity) {
+		currentIndexItem = getItem(itemTree.searchTree(name).getIndex());
+		currentIndexItem.setQuantity(quantity);
+		return cart.add(currentIndexItem);
+	}
+	
+	//gets rid of the item from the cart
+	public boolean removeItemFromCart(int index) {
+		return cart.remove(index) != null;
+	}
+	
+	//returns a copy of the item cart as strings
+	public String[][] getItemCart() {
+		String[][] itemCart = new String[cart.size()][9];
+		item itemInfo;
+		for(int i = 0; i < cart.size(); i++) {
+			itemInfo = cart.get(i);
+			itemCart[i][0] = itemInfo.getName();
+			itemCart[i][0] = itemInfo.getBrand();
+			itemCart[i][0] = itemInfo.getDescription();
+			itemCart[i][0] = itemInfo.getImage();
+			itemCart[i][0] = "" + itemInfo.getPrice();
+			itemCart[i][0] = "" + itemInfo.getWeight();
+			itemCart[i][0] = "" + itemInfo.getQuantity();
+			itemCart[i][0] = "" + itemInfo.getPopularity();
+			itemCart[i][0] = "" + itemInfo.getNumReviewed();
+		}
+		return itemCart;
 	}
 	
 	//returns false if the user was unable to add user information or the correct info type was passed
@@ -511,7 +543,7 @@ public class database implements DatabaseInterface{
 	}
 	
 	public Image loadImage(String fileName) {
-		Image image = new Image("file:/itemImages/" + fileName);
+		Image image = new Image("itemImages/" + fileName);
 		return image;
 	}
 	

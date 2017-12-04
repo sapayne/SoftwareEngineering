@@ -12,6 +12,15 @@ public interface DatabaseInterface {
 	//9 columns being - name, brand, description, image, price, weight, quantity, popularity, numReviewed
 	String[][] searchResults(String name, int range);
 	
+	//pass the name of the item and the quantity you want to buy
+	boolean addItemToCart(String name, int quantity);
+	
+	//pass the index can be found by using the getItemCart method
+	boolean removeItemFromCart(int index);
+	
+	//returns the current item cart of the user
+	String[][] getItemCart();
+	
 	//used to return the user's customer names, shipping address, billing address, and credit card
 	// enter "name", "ship", "bill", or "card" to get each respected data, returns false if one of the four strings is not used 
 	String[] getUserInfo(String infoType); 
