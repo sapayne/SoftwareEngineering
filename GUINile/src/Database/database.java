@@ -29,8 +29,8 @@ public class database implements DatabaseInterface{
 	 */
 	private user currentUser; 
 	private Password currentPassword;
-	private DatabaseReader reader;
-	private DatabaseWriter writer;
+	private DatabaseReader reader = new DatabaseReader();
+	private DatabaseWriter writer = new DatabaseWriter();
 	
 	
 	ArrayList<item> itemDatabase = new ArrayList<item>();
@@ -549,10 +549,12 @@ public class database implements DatabaseInterface{
 	
 	//correctly loads images from local storage
 	public Image loadImage(String fileName, int width, int height) {
+		File file = new File(fileName);
         BufferedImage readImage = null;
 			try {
+				file = reader.read(fileName, "image");
 				readImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-				readImage = ImageIO.read(reader.read(fileName, "image"));
+				readImage = ImageIO.read(file);
 				Image image = SwingFXUtils.toFXImage(readImage, null);
 				return image;
 			} catch (IOException error) {
@@ -573,7 +575,7 @@ public class database implements DatabaseInterface{
 		int itemIndex;
 		
 		try {
-			FileReader fileReader = new FileReader(this.reader.read(fileName, "item"));
+			FileReader fileReader = new FileReader(reader.read(fileName, "item"));
 			BufferedReader reader = new BufferedReader(fileReader);
 			
 			//used to retrieve all the data of an item then puts it into the database and b+ tree
@@ -626,7 +628,7 @@ public class database implements DatabaseInterface{
 	}
 	
 	private boolean loadUsers() {
-		String line = null, username ="", password = "",  customerName, index, Price, Quantity, time;
+		String line = null, userFilePath, username ="", password = "",  customerName, index, Price, Quantity, time;
 		int i = 0, linecount = 0;
 		File filePath = reader.read("user" + i + ".data", "user");
 		while(filePath != null) { // data type returned File
