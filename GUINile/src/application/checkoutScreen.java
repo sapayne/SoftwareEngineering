@@ -1,6 +1,7 @@
 package application;
 
 
+import database.database;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,6 +20,8 @@ import javafx.stage.Stage;
 
 public class checkoutScreen {
 	private GridPane grid;
+    database product = new database();
+
 	
 	
 	public checkoutScreen() {

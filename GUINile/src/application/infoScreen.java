@@ -1,5 +1,6 @@
 package application;
 
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,6 +15,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+/**
+*
+* @author dzheng
+*/
 
 public class infoScreen {
 	private GridPane info;

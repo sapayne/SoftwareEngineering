@@ -1,8 +1,10 @@
 package application;
 
-import Database.Product;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+
+import database.Product;
+import database.database;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -47,6 +49,8 @@ public class infoScreenAddress{
 	private VBox vBox; 
 	TableView<Product> table;
 	TextField nameInput, numInput, dateInput;
+    database product = new database();
+
 	
 	public infoScreenAddress() {
 		

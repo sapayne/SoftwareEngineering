@@ -1,12 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package application;
 
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+
+import database.database;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -32,6 +29,8 @@ import javafx.stage.Stage;
  */
 public class accountScreen  {
     private GridPane view;
+    database product = new database();
+    
     
     public accountScreen() {
         

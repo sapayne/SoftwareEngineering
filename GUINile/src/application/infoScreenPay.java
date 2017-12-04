@@ -1,8 +1,10 @@
 package application;
 
-import Database.Product;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+
+import database.Product;
+import database.database;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,24 +42,21 @@ import javafx.stage.Stage;
 
 public class infoScreenPay {
 	
+	database product = new database();
 	private VBox vBox;
-	TableView<Product> table;
-	TextField nameInput, numInput, dateInput;
+	TableView<String> table;
+	TextField nameInput, numInput;
 
 
 	public infoScreenPay(){
 		
-		TableColumn<Product, String> nameColumn = new TableColumn<>("Name");
+		TableColumn<String, String> nameColumn = new TableColumn<>("Name");
 		nameColumn.setMinWidth(200);
-		nameColumn.setCellValueFactory(new PropertyValueFactory<>("cardName"));
+		nameColumn.setCellValueFactory(new PropertyValueFactory<>("infoType"));
 		
-		TableColumn<Product, String> numColumn = new TableColumn<>("Number");
+		TableColumn<String, String> numColumn = new TableColumn<>("Number");
 		numColumn.setMinWidth(200);
-		numColumn.setCellValueFactory(new PropertyValueFactory<>("cardNum"));
-		
-		TableColumn<Product, String> dateColumn = new TableColumn<>("Expiration");
-		dateColumn.setMinWidth(100);
-		dateColumn.setCellValueFactory(new PropertyValueFactory<>("cardExdate"));
+		numColumn.setCellValueFactory(new PropertyValueFactory<>("info"));
 		
 		nameInput = new TextField();
 		nameInput.setPromptText("Name");
@@ -66,10 +65,6 @@ public class infoScreenPay {
 		numInput = new TextField();
 		numInput.setPromptText("Number");
 		numInput.setMinWidth(100);
-		
-		dateInput = new TextField();
-		dateInput.setPromptText("Date");
-		dateInput.setMinWidth(100);
 		
 		Button addButton = new Button("Add");
 		addButton.setOnAction(e -> addButtonClicked());
@@ -80,43 +75,42 @@ public class infoScreenPay {
 		HBox hBox = new HBox();
 		hBox.setPadding(new Insets(10,10,10,10));
 		hBox.setSpacing(10);
-		hBox.getChildren().addAll(nameInput, numInput, dateInput, addButton, deleteButton);
+		hBox.getChildren().addAll(nameInput, numInput, addButton, deleteButton);
 		
 		table = new TableView<>();
 		table.setItems(getProduct());
-		table.getColumns().addAll(nameColumn, numColumn, dateColumn);
+		table.getColumns().addAll(nameColumn, numColumn);
 		
 		vBox = new VBox();
 		vBox.getChildren().addAll(table,hBox);
 		
 	}
 	
+	
 	public void addButtonClicked() {
-		Product product = new Product();
-		product.setCardName(nameInput.getText());
-		product.setCardNum(numInput.getText());
-		product.setCardExdate(dateInput.getText());
-		table.getItems().add(product);
+		product.addUserInfo(nameInput.getText(), numInput.getText());
+		table.getItems();
 		nameInput.clear();
 		numInput.clear();
-		dateInput.clear();
 	}
 	
 	public void deleteButtonClicked() {
-		ObservableList<Product> productSelected, allProducts;
+		ObservableList<String> productSelected, allProducts;
 		allProducts = table.getItems();
 		productSelected = table.getSelectionModel().getSelectedItems();
 		
 		productSelected.forEach(allProducts::remove);
 	}
 	
-	public ObservableList<Product> getProduct(){
-		ObservableList<Product> products = FXCollections.observableArrayList();
-		products.add(new Product("David", "VISA 9999", "12/22"));
-		products.add(new Product("David", "AMEX 1020", "1/21"));
-
+	public ObservableList<String> getProduct(){
+		ObservableList<String> list = FXCollections.observableArrayList();
+		String [] name = product.getUserInfo("name");
+		for(int i = 0; i < name.length; i ++) {
+			list.add(name[i]);
+		}
 		
-		return products;
+		
+		return list;
 	}
 
 	public Parent getView() {

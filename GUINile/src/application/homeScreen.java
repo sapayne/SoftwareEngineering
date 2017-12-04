@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package application;
 
+import database.database;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -34,6 +30,8 @@ public class homeScreen {
     private GridPane home;
     private HBox hb;
     private HBox hb2;
+    database product = new database();
+
     
     public homeScreen() {
         

@@ -1,12 +1,10 @@
 package application;
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-import Database.DatabaseInterface;
+
 import javafx.application.Application;
 import static javafx.application.Application.launch;
+
+import database.DatabaseInterface;
+import database.database;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -45,6 +43,8 @@ public class GUI extends Application {
     static String user = "a";
     static String password = "a";
     static String checkEmail, checkPass;
+    database product = new database();
+
     
     public static void main(String[] args) {
         launch(args);
@@ -172,8 +172,7 @@ public class GUI extends Application {
         pass.setText("");
     
         });
-}
-}
     
-
-
+    
+}
+}

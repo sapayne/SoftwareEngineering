@@ -1,5 +1,6 @@
 package application;
 
+import database.database;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,7 +20,9 @@ import javafx.stage.Stage;
 public class confirmationScreen {
 	
 	private GridPane confirm;
+    database product = new database();
 
+	
 	public confirmationScreen() {
             
 	//Sizing and spacing of the GUI
