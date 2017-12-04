@@ -169,32 +169,36 @@ public class BTreeNode {
 	//only works if the array is all of type string, since if iterated through an object array it will return
 	//the java provided name for the pointer in memory thus leading to some unwanted results.
 	protected int binarySearch(String name, int startingPointer, int endingPointer) {
-		if(endingPointer-startingPointer > 1) {
-			/* The if statement checks if the value enter is less than the value currently being checked.
-			 * The else if statement checks if the value entered is greater than the value currently being checked.
-			 * The last else statement represents if the value entered is equal to the value being checked.
-			 * The test statements are ordered in this way, because if the equal statement was first that would 
-			 * have the least number of operations done so long as you always get the value you are looking for
-			 * as the middle value, however most of the time you will not match the value being searched for so 
-			 * it will actually take up operations. So instead we check if the value is less than or greater than
-			 * the current value (order for less than or greater than doesn't matter as it has the same outcome).
-			 * In the long run this will save running time and lower the number of computations made.
-			 */
-			if (name.compareTo(getContents((endingPointer-startingPointer)/2 + startingPointer)) < 0){
-				// recursion used as a loop to pinpoint the value being looked for
-				return binarySearch(name, startingPointer, (endingPointer-startingPointer)/2 + startingPointer);
-			} else if(name.compareTo(getContents((endingPointer-startingPointer)/2 + startingPointer)) > 0) {
-				// recursion used as a loop to pinpoint the value being looked for
-				return binarySearch(name, (endingPointer-startingPointer)/2 + startingPointer, endingPointer);
-			} else {
-				return ((endingPointer-startingPointer)/2 + startingPointer);
-			}
+		if(size == 0) {
+			return 0;
 		} else {
-			// base case so the order doesn't matter and there doesn't need to be 3 cases as it's just one value
-			if(name.compareTo(getContents((endingPointer-startingPointer)/2 + startingPointer)) < 0) {
-				return (endingPointer-startingPointer)/2 + startingPointer - 1;
+			if(endingPointer-startingPointer > 1) {
+				/* The if statement checks if the value enter is less than the value currently being checked.
+				 * The else if statement checks if the value entered is greater than the value currently being checked.
+				 * The last else statement represents if the value entered is equal to the value being checked.
+				 * The test statements are ordered in this way, because if the equal statement was first that would 
+				 * have the least number of operations done so long as you always get the value you are looking for
+				 * as the middle value, however most of the time you will not match the value being searched for so 
+				 * it will actually take up operations. So instead we check if the value is less than or greater than
+				 * the current value (order for less than or greater than doesn't matter as it has the same outcome).
+				 * In the long run this will save running time and lower the number of computations made.
+				 */
+				if (name.compareTo(getContents((endingPointer-startingPointer)/2 + startingPointer)) < 0){
+					// recursion used as a loop to pinpoint the value being looked for
+					return binarySearch(name, startingPointer, (endingPointer-startingPointer)/2 + startingPointer);
+				} else if(name.compareTo(getContents((endingPointer-startingPointer)/2 + startingPointer)) > 0) {
+					// recursion used as a loop to pinpoint the value being looked for
+					return binarySearch(name, (endingPointer-startingPointer)/2 + startingPointer, endingPointer);
+				} else {
+					return ((endingPointer-startingPointer)/2 + startingPointer);
+				}
 			} else {
-				return (endingPointer-startingPointer)/2 + startingPointer;
+				// base case so the order doesn't matter and there doesn't need to be 3 cases as it's just one value
+				if(name.compareTo(getContents((endingPointer-startingPointer)/2 + startingPointer)) < 0) {
+					return (endingPointer-startingPointer)/2 + startingPointer - 1;
+				} else {
+					return (endingPointer-startingPointer)/2 + startingPointer;
+				}
 			}
 		}
 	}

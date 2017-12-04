@@ -7,7 +7,7 @@ public class BPlusTree {
 	
 	private BTreeNode treeRoot;
 	private BTreeNode current;
-	private Node node = new Node();
+	private Node node;
 	private int length;
 	private int size; //the size of the tree, number of nodes in the whole b+ tree
 	private boolean oddFlag;
@@ -141,6 +141,7 @@ public class BPlusTree {
 			if (current.size() == current.getLength()) {
 				split(current);
 			} else {
+				node = new Node();
 				node.setName(name);
 				node.setIndex(index);
 				insort(node);
@@ -413,7 +414,8 @@ public class BPlusTree {
 	
 	//	used to see if the btreenode being tested is at the lowest level of the tree
 	private boolean isLeaf(BTreeNode current) {
-		return current.getChild(0) instanceof Node;
+		
+		return current.getChild(0) instanceof Node || current.getChild(0) == null;
 	}
 	
 	//	test if the tree is empty, not really ever used outside of initializing the tree
